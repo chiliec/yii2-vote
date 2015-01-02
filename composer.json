@@ -12,9 +12,10 @@
         {
             "name": "Vladimir Babin",
             "email": "vovababin@gmail.com",
-			"homepage": "http://chiliec.ru"
+            "homepage": "http://chiliec.ru"
         }
     ],
+    "minimum-stability": "dev",
     "require": {
         "yiisoft/yii2": "*"
     },
