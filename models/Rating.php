@@ -3,6 +3,7 @@
 namespace chiliec\vote\models;
 
 use Yii;
+use yii\base\InvalidParamException;
 
 /**
  * This is the model class for table "{{%rating}}".
@@ -10,7 +11,7 @@ use Yii;
  * @property string $id
  * @property integer $model_id
  * @property string $target_id
- * @property string $user_ip
+ * @property string $user_id
  * @property integer $value
  * @property integer $date
  */
@@ -41,9 +42,9 @@ class Rating extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['model_id', 'target_id', 'user_ip', 'value'], 'required'],
+            [['model_id', 'target_id', 'user_id', 'value'], 'required'],
             [['model_id', 'target_id', 'value', 'date'], 'integer'],
-            [['user_ip'], 'string', 'max' => 16]
+            [['user_id'], 'string', 'max' => 16]
         ];
     }
 
@@ -56,27 +57,25 @@ class Rating extends \yii\db\ActiveRecord
             'id' => 'ID',
             'model_id' => 'Model ID',
             'target_id' => 'Target ID',
-            'user_ip' => 'User Ip',
+            'user_id' => 'User ID',
             'value' => 'Value',
             'date' => 'Date',
         ];
     }
 
-    public static function matchingModels() {
-        return [
-            'story' => 0,
-            'video' => 1,
-            'film'  => 2,
-            'audio' => 3,
-        ];
+    public static function getModelIdByName($model_name) {
+        $models = Yii::$app->getModule('vote')->matchingModels;
+        if(in_array($model_name, $models)) {
+            return $models[$model_name];
+        } else {
+            return false;
+        }
     }
 
     public function getRating($model_name, $target_id) {
-        $models = $this->matchingModels();
-        if(in_array($model_name, $models)) {
-            $model_id = $models[$model_name];
-        } else {
-            die('Нет таких сочетаний!');
+        $model_id = $this->getModelIdByName($model_name);
+        if(!is_int($model_id)) {
+            throw new InvalidParamException('Model name not recognized');
         }
 
         $likes = Yii::$app->cache->get('likes'.$model_name.$target_id);

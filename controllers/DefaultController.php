@@ -11,19 +11,26 @@ class DefaultController extends \yii\web\Controller
     public function actionIndex()
     {
         if(Yii::$app->request->getIsAjax()) { //todo: дополнительно проверить что запрос с нащего домена (или проверить токен)
-            $user_ip = Yii::$app->request->getUserIP();
+
             $model_name = Yii::$app->request->getQueryParam('model_name');
             $target_id = Yii::$app->request->getQueryParam('target_id');
             $act = Yii::$app->request->getQueryParam('act');
 
-            if($user_ip==null) {
-                return 'IP-адрес не распознан';
+            if(Yii::$app->getModule('vote')->allow_guests) {
+                $user_id = Yii::$app->request->getUserIP();
+            } else {
+                if(!Yii::$app->user->getIsGuest()) {
+                    $user_id = Yii::$app->user->getId();
+                } else {
+                    $user_id = null;
+                }
+            }
+            if($user_id==null) {
+                return 'Пользователь не распознан';
             }
 
-            $models = Rating::matchingModels();
-            if(in_array($model_name, $models)) {
-                $model_id = $models[$model_name];
-            } else {
+            $model_id = Rating::getModelIdByName($model_name);
+            if(!is_int($model_id)) {
                 return 'Модель не зарегистрирована!';
             }
 
@@ -39,13 +46,13 @@ class DefaultController extends \yii\web\Controller
                 return 'Неправильное действие!';
             }
 
-            $isVoted = Rating::findOne(["model_id"=>$model_id, "target_id"=>$target_id, "user_ip"=>$user_ip]);
+            $isVoted = Rating::findOne(["model_id"=>$model_id, "target_id"=>$target_id, "user_id"=>$user_id]);
 
             if(is_null($isVoted)) {
                 $newVote = new Rating;
                 $newVote->model_id = $model_id;
                 $newVote->target_id = $target_id;
-                $newVote->user_ip = $user_ip;
+                $newVote->user_id = (string)$user_id;
                 $newVote->value = $act;
                 if($newVote->save()) {
                     if($act==1) {
