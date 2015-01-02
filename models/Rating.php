@@ -25,17 +25,6 @@ class Rating extends \yii\db\ActiveRecord
         return '{{%rating}}';
     }
 
-
-    public function beforeSave($insert) {
-        if(parent::beforeSave($insert)) {
-            $this->date = time();
-            return true;
-        } else {
-            return false;
-        }
-    }
-
-
     /**
      * @inheritdoc
      */
