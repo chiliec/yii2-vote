@@ -95,3 +95,17 @@ In the above `pathMap` means that every view in `@chiliec/vote/views` will be fi
 
 Identifiers should be left (javascript logic is fastened on them), but you can change name of tags and classes.
 
+For example, you can markup with [schema.org](http://schema.org/AggregateRating) synthax for help search engines recognize it:
+
+```php
+<div id="vote-<?=$model_name.$target_id;?>" style="text-align: center;">
+    <span id="vote-up-<?=$model_name.$target_id;?>" class="glyphicon glyphicon-thumbs-up" onclick="vote('<?=$model_name;?>',<?=$target_id;?>,'like'); return false;" style="cursor:pointer;"><?=$rating['likes'];?></span>&nbsp;
+    <span id="vote-down-<?=$model_name.$target_id;?>" class="glyphicon glyphicon-thumbs-down" onclick="vote('<?=$model_name;?>',<?=$target_id;?>,'dislike'); return false;" style="cursor:pointer;"><?=$rating['dislikes'];?></span>
+    <div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating" id="vote-response-<?=$model_name.$target_id;?>">
+        <meta itemprop="bestRating" content="10" />
+        <meta itemprop="worstRating" content="0" />
+        Aggregate rating: <span itemprop="ratingValue"><?=$rating['aggregate_rating'];?> based on <span itemprop="ratingCount"><?=$rating['likes']+$rating['dislikes'];?></span> reviews
+    </div>
+</div>
+````
+
