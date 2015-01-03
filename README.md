@@ -83,12 +83,15 @@ Although view of these widget are not configurable, Yii2 provides a way to overr
 ...
 ```
 
-In the above `pathMap` means that every view in @chiliec/vote/views will be first searched under `@app/views/vote`. After that create file `display.php` and decorate these code as you wish:
+In the above `pathMap` means that every view in `@chiliec/vote/views` will be first searched under `@app/views/vote`. Because of that create file `display.php` in `app/views/vote`, put these code and decorate it as you wish:
+
 ```php
-<div id="vote<?=$target_id;?>">
-    <span onclick="vote('<?=$model_name;?>',<?=$target_id;?>,'like'); return false;"><?=$rating['likes'];?></span>&nbsp;
-    <span onclick="vote('<?=$model_name;?>',<?=$target_id;?>,'dislike'); return false;"><?=$rating['dislikes'];?></span>
-    <div id="vote-response<?=$target_id;?>"><?=$rating['aggregate_rating'];?></div>
+<div id="vote-<?=$model_name.$target_id;?>" style="text-align: center;">
+    <span id="vote-up-<?=$model_name.$target_id;?>" class="glyphicon glyphicon-thumbs-up" onclick="vote('<?=$model_name;?>',<?=$target_id;?>,'like'); return false;" style="cursor:pointer;"><?=$rating['likes'];?></span>&nbsp;
+    <span id="vote-down-<?=$model_name.$target_id;?>" class="glyphicon glyphicon-thumbs-down" onclick="vote('<?=$model_name;?>',<?=$target_id;?>,'dislike'); return false;" style="cursor:pointer;"><?=$rating['dislikes'];?></span>
+    <div id="vote-response-<?=$model_name.$target_id;?>">Aggregate rating: <?=$rating['aggregate_rating'];?></div>
 </div>
 ```
+
+Identifiers should be left (javascript logic is fastened on them), but you can change name of tags and classes.
 

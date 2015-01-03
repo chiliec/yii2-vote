@@ -1,7 +1,4 @@
-﻿/**
- * Голосовалка
- */
-var attempt = new Array();
+﻿var attempts = [];
 var smiles = [
     "&#65381;_&#65381;",
     "&not;_&not;",
@@ -18,9 +15,9 @@ var smiles = [
  * @param act - 'like' or 'dislike'
  */
 function vote(model,target,act) {
-    if(['like','dislike'].indexOf(act) == -1 ) return;
-    if (typeof attempt[target] == 'undefined') {
-        attempt[target] = 1;
+    if(['like','dislike'].indexOf(act) === -1) return;
+    if (attempts[model+target] !== true) {
+        attempts[model+target] = true;
         jQuery.ajax({
             url: '/vote/',
             type: "GET",
@@ -30,23 +27,18 @@ function vote(model,target,act) {
                 act: act
             },
             success: function (data) {
-                //todo: проверка на удачность голосования без привязки к тексту ответа
-                if(act=='like') {
-                    jQuery('#vote'+target+' .glyphicon-thumbs-up').text(parseInt(jQuery('#vote'+target+' .glyphicon-thumbs-up').text()) + 1);
-                } else if(act=='dislike') {
-                    jQuery('#vote'+target+' .glyphicon-thumbs-down').text(parseInt(jQuery('#vote'+target+' .glyphicon-thumbs-down').text()) + 1);
+                if(data.successfully === true) {
+                    if(act==='like') {
+                        jQuery('#vote-up-'+model+target).text(parseInt(jQuery('#vote-'+model+target).text()) + 1);
+                    } else {
+                        jQuery('#vote-down-'+model+target).text(parseInt(jQuery('#vote-'+model+target).text()) + 1);
+                    }
                 }
-                jQuery('#vote-response'+target).html(data);
+                jQuery('#vote-response-'+model+target).html(data.content);
             }
         });
     } else {
-        attempt[target]++;
-        if (attempt[target] < 5) {
-            reply='Не шалите!'
-        }
-        else {
-            reply = smiles[Math.floor(Math.random()*smiles.length)];
-        }
-        jQuery('#vote-response'+target).html(reply);
+        jQuery('#vote-response-'+model+target).html(smiles[Math.floor(Math.random()*smiles.length)]);
     }
+
 }
