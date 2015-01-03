@@ -3,6 +3,7 @@
 namespace chiliec\vote;
 
 use yii\base\InvalidConfigException;
+use Yii;
 
 class Module extends \yii\base\Module
 {
@@ -26,6 +27,12 @@ class Module extends \yii\base\Module
         if(!isset($this->matchingModels)) {
             throw new InvalidConfigException('matchingModels not configurated');
         }
-
+        if(empty(Yii::$app->i18n->translations['vote'])) {
+            Yii::$app->i18n->translations['vote'] = [
+                'class' => 'yii\i18n\PhpMessageSource',
+                'sourceLanguage' => 'en-US',
+                'basePath' => __DIR__ . '/messages',
+            ];
+        }
     }
 }

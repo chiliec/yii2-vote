@@ -28,16 +28,16 @@ class DefaultController extends \yii\web\Controller
             }
 
             if($user_id==null) {
-                return ['content' => 'Пользователь не распознан', 'successfully' => false];
+                return ['content' => Yii::t('vote','The user is not recognized'), 'successfully' => false];
             }
 
             $model_id = Rating::getModelIdByName($model_name);
             if(!is_int($model_id)) {
-                return ['content' => 'Модель не зарегистрирована!', 'successfully' => false];
+                return ['content' => Yii::t('vote','The model is not registered'), 'successfully' => false];
             }
 
             if($target_id==null) {
-                return ['content' => 'Цель не определена', 'successfully' => false];
+                return ['content' => Yii::t('vote', 'The purpose is not defined'), 'successfully' => false];
             }
 
             if($act=='like'){
@@ -45,7 +45,7 @@ class DefaultController extends \yii\web\Controller
             } elseif($act=='dislike') {
                 $act = 0;
             } else {
-                return ['content' => 'Неправильное действие!', 'successfully' => false];
+                return ['content' => Yii::t('vote', 'Wrong action'), 'successfully' => false];
             }
 
             $isVoted = Rating::findOne(["model_id"=>$model_id, "target_id"=>$target_id, "user_id"=>$user_id]);
@@ -58,19 +58,19 @@ class DefaultController extends \yii\web\Controller
                 if($newVote->save()) {
                     if($act===1) {
                         Yii::$app->cache->delete('likes'.$model_name.$target_id);
-                        return ['content' => 'Голос принят. Не забудьте поделиться с друзьями!', 'successfully' => true];
+                        return ['content' => Yii::t('vote', 'Your vote is accepted. Thanks!'), 'successfully' => true];
                     } else {
                         Yii::$app->cache->delete('dislikes'.$model_name.$target_id);
-                        return ['content' => 'Вы правы, действительно паршивая история...', 'successfully' => true];
+                        return ['content' => Yii::t('vote', 'Thanks for your opinion'), 'successfully' => true];
                     }
                 } else {
-                    return ['content' => 'Ошибка валидации!', 'successfully' => false];
+                    return ['content' => Yii::t('vote', 'Validation error'), 'successfully' => false];
                 }
             } else {
-                return ['content' => 'Вы уже голосовали!', 'successfully' => false];
+                return ['content' => Yii::t('vote', 'You have already voted!'), 'successfully' => false];
             }
         } else {
-            throw new MethodNotAllowedHttpException('Попытка обмана', 405);
+            throw new MethodNotAllowedHttpException(Yii::t('vote', 'Forbidden method'), 405);
         }
     }
 }
