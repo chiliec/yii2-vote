@@ -29,9 +29,9 @@ function vote(model,target,act) {
             success: function (data) {
                 if(data.successfully === true) {
                     if(act==='like') {
-                        jQuery('#vote-up-'+model+target).text(parseInt(jQuery('#vote-'+model+target).text()) + 1);
+                        jQuery('#vote-up-'+model+target).text(parseInt(jQuery('#vote-up-'+model+target).text()) + 1);
                     } else {
-                        jQuery('#vote-down-'+model+target).text(parseInt(jQuery('#vote-'+model+target).text()) + 1);
+                        jQuery('#vote-down-'+model+target).text(parseInt(jQuery('#vote-down-'+model+target).text()) + 1);
                     }
                 }
                 jQuery('#vote-response-'+model+target).html(data.content);
