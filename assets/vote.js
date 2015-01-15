@@ -14,7 +14,8 @@ var smiles = [
  * @param target - target_id
  * @param act - 'like' or 'dislike'
  */
-function vote(model,target,act) {
+function vote(model,target,act)
+{
     if(['like','dislike'].indexOf(act) === -1) return;
     if (attempts[model+target] !== true) {
         attempts[model+target] = true;

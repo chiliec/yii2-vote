@@ -1,6 +1,7 @@
 <?php
 namespace chiliec\vote;
 
+use chiliec\vote\models\Rating;
 use yii\base\InvalidParamException;
 use yii\base\Widget;
 use Yii;
@@ -9,8 +10,8 @@ use Yii;
  * Class Display
  * @author Vladimir Babin <vovababin@gmail.com>
  */
-class Display extends Widget {
-
+class Display extends Widget
+{
     /**
      * @var string
      */
@@ -21,21 +22,22 @@ class Display extends Widget {
      */
     public $target_id;
 
-    public function init(){
+    public function init()
+    {
         parent::init();
-        if(!isset($this->model_name) or !isset($this->target_id))
+        if(!isset($this->model_name) or !isset($this->target_id)) {
             throw new InvalidParamException('model_name or target_id not configurated');
+        }
         VoteAsset::register($this->view);
     }
 
-    public function run(){
-        $rating = new \chiliec\vote\models\Rating();
+    public function run()
+    {
+        $rating = new Rating();
         return $this->render('display',[
             'target_id' => $this->target_id,
             'model_name' => $this->model_name,
             'rating' => $rating->getRating($this->model_name, $this->target_id),
         ]);
-
-
     }
 }

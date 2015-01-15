@@ -4,6 +4,7 @@ namespace chiliec\vote\models;
 
 use Yii;
 use yii\base\InvalidParamException;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%rating}}".
@@ -15,7 +16,7 @@ use yii\base\InvalidParamException;
  * @property integer $value
  * @property integer $date
  */
-class Rating extends \yii\db\ActiveRecord
+class Rating extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -52,7 +53,12 @@ class Rating extends \yii\db\ActiveRecord
         ];
     }
 
-    public static function getModelIdByName($model_name) {
+    /**
+     * @param string $model_name Name of model
+     * @return integer|false Id corresponding model or false if matches not found
+     */
+    public static function getModelIdByName($model_name)
+    {
         $models = Yii::$app->getModule('vote')->matchingModels;
         if(in_array($model_name, $models)) {
             return $models[$model_name];
@@ -61,7 +67,13 @@ class Rating extends \yii\db\ActiveRecord
         }
     }
 
-    public function getRating($model_name, $target_id) {
+    /**
+     * @param string $model_name Name of model
+     * @param integer $target_id Current value of primary key
+     * @return array
+     */
+    public function getRating($model_name, $target_id)
+    {
         $model_id = $this->getModelIdByName($model_name);
         if(!is_int($model_id)) {
             throw new InvalidParamException('Model name not recognized');
@@ -69,13 +81,13 @@ class Rating extends \yii\db\ActiveRecord
 
         $likes = Yii::$app->cache->get('likes'.$model_name.$target_id);
         if($likes === false) {
-            $likes = $this->find()->where(["model_id"=>$model_id, "target_id"=>$target_id, "value"=>1])->count();
+            $likes = $this->find()->where(['model_id'=>$model_id, 'target_id'=>$target_id, 'value'=>1])->count();
             Yii::$app->cache->set('likes'.$model_name.$target_id, $likes);
         }
 
         $dislikes = Yii::$app->cache->get('dislikes'.$model_name.$target_id);
         if($dislikes === false) {
-            $dislikes = $this->find()->where(["model_id"=>$model_id, "target_id"=>$target_id, "value"=>0])->count();
+            $dislikes = $this->find()->where(['model_id'=>$model_id, 'target_id'=>$target_id, 'value'=>0])->count();
             Yii::$app->cache->set('dislikes'.$model_name.$target_id, $dislikes);
         }
 
