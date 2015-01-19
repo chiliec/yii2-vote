@@ -6,6 +6,7 @@ return [
     'The purpose is not defined' => 'Цель не определена',
     'Wrong action' => 'Неправильное действие!',
     'Your vote is accepted. Thanks!' => 'Голос принят. Спасибо!',
+    'Your vote has been changed. Thanks!' => 'Голос изменен. Спасибо!',
     'Thanks for your opinion' => 'Спасибо за ваше мнение',
     'Validation error' => 'Ошибка валидации',
     'You have already voted!' => 'Вы уже голосовали!',

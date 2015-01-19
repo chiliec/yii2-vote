@@ -33,7 +33,8 @@ class Rating extends ActiveRecord
     {
         return [
             [['model_id', 'target_id', 'user_id', 'value'], 'required'],
-            [['model_id', 'target_id', 'value', 'date'], 'integer'],
+            [['model_id', 'target_id', 'value'], 'integer'],
+            [['date'], 'safe'],
             [['user_id'], 'string', 'max' => 16]
         ];
     }

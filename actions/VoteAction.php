@@ -49,7 +49,7 @@ class VoteAction extends Action
                 return ['content' => Yii::t('vote', 'Wrong action'), 'successfully' => false];
             }
 
-            $isVoted = Rating::findOne(["model_id"=>$model_id, "target_id"=>$target_id, "user_id"=>$user_id]);
+            $isVoted = Rating::findOne(['model_id'=>$model_id, 'target_id'=>$target_id, 'user_id'=>$user_id]);
             if(is_null($isVoted)) {
                 $newVote = new Rating;
                 $newVote->model_id = $model_id;
@@ -68,7 +68,14 @@ class VoteAction extends Action
                     return ['content' => Yii::t('vote', 'Validation error'), 'successfully' => false];
                 }
             } else {
-                return ['content' => Yii::t('vote', 'You have already voted!'), 'successfully' => false];
+                if($isVoted->value == $act) {
+                    return ['content' => Yii::t('vote', 'You have already voted!'), 'successfully' => false];
+                } else {
+                    $isVoted->value = $act;
+                    if($isVoted->save()) {
+                        return ['content' => Yii::t('vote', 'Your vote has been changed. Thanks!'), 'successfully' => true];
+                    }
+                }
             }
         } else {
             throw new MethodNotAllowedHttpException(Yii::t('vote', 'Forbidden method'), 405);
