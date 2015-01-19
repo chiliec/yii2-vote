@@ -1,6 +1,8 @@
 Vote for Yii2
 ======================
 
+[![Latest Stable Version](https://poser.pugx.org/chiliec/yii2-vote/v/stable.svg)](https://packagist.org/packages/chiliec/yii2-vote) [![Total Downloads](https://poser.pugx.org/chiliec/yii2-vote/downloads.svg)](https://packagist.org/packages/chiliec/yii2-vote) [![Latest Unstable Version](https://poser.pugx.org/chiliec/yii2-vote/v/unstable.svg)](https://packagist.org/packages/chiliec/yii2-vote) [![License](https://poser.pugx.org/chiliec/yii2-vote/license.svg)](https://packagist.org/packages/chiliec/yii2-vote)
+
 Next steps will guide you through the process of installing yii2-vote using **composer**. Installation is a quick and easy three-step process.
 
 Step 1: Install component via composer
@@ -112,13 +114,22 @@ For example, you can markup with [schema.org](http://schema.org/AggregateRating)
 How to store rating in database
 -------------------------------
 Sometimes you need to store rating in the same table (for example, for sorting). 
-At first, create new fields `rating` and `aggregate_rating` inside target table. After that, add new behavior in model:
+At first, create new fields `rating` and `aggregate_rating` inside target table: 
+
+```sql
+ALTER TABLE `YOUR_TARGET_TABLE_NAME` ADD (
+  `rating` smallint(6) NOT NULL,
+  `aggregate_rating` float(3,2) unsigned NOT NULL
+)
+```
+
+After that, add new behavior in target model:
 
 ```php
     public function behaviors() {
         return [
             [
-                'class' => \app\components\RatingBehavior::className(),
+                'class' => \chiliec\vote\behaviors\RatingBehavior::className(),
                 'model_name' => 'story', // name of this model
             ],
         // ...
@@ -126,41 +137,5 @@ At first, create new fields `rating` and `aggregate_rating` inside target table.
     }
 ```
 
-Then, create new file `RatingBehavior.php` in `components` folder and write that:
 
-```php
-<?php
-
-namespace app\components;
-
-use chiliec\vote\models\Rating;
-use yii\db\ActiveRecord;
-use yii\base\Behavior;
-
-class RatingBehavior extends Behavior
-{
-    public $model_name;
-
-    public function events()
-    {
-        return [
-            ActiveRecord::EVENT_AFTER_FIND => 'afterFind',
-        ];
-    }
-
-    public function afterFind($event)
-    {
-        $model = new Rating();
-        $model_rating = $model->getRating($this->model_name, $this->owner->id);
-        $rating = $model_rating['likes']-$model_rating['dislikes'];
-        $aggregate_rating = $model_rating['aggregate_rating'];
-        if($this->owner->rating != $rating OR $this->owner->aggregate_rating != $aggregate_rating) {
-            \Yii::$app->db->createCommand()->update(
-                '{{%'.$this->model_name.'}}', // if model name matches with table name
-                ['rating'=>$rating, 'aggregate_rating'=>$aggregate_rating],
-                ['id'=>$this->owner->id]
-            )->execute();
-        }
-    }
-}
-```
+Enjoy and don't forget to send me your [Issues](https://github.com/Chiliec/yii2-vote/issues) and Pull Requests :)
