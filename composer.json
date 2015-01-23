@@ -15,18 +15,12 @@
             "homepage": "http://chiliec.ru"
         }
     ],
-    "minimum-stability": "dev",
     "require": {
         "yiisoft/yii2": "*"
     },
     "autoload": {
         "psr-4": {
             "chiliec\\vote\\": ""
-        }
-    },
-    "extra": {
-        "branch-alias": {
-            "dev-master": "1.0.x-dev"
         }
     }
 }

@@ -1,4 +1,10 @@
 <?php
+/**
+ * @link https://github.com/Chiliec/yii2-vote
+ * @author Vladimir Babin <vovababin@gmail.com>
+ * @license http://opensource.org/licenses/BSD-3-Clause
+ */
+
 namespace chiliec\vote;
 
 use chiliec\vote\models\Rating;
@@ -6,10 +12,6 @@ use yii\base\InvalidParamException;
 use yii\base\Widget;
 use Yii;
 
-/**
- * Class Display
- * @author Vladimir Babin <vovababin@gmail.com>
- */
 class Display extends Widget
 {
     /**

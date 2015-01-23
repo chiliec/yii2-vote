@@ -11,13 +11,13 @@ Step 1: Install component via composer
 Run command
 
 ```
-php composer.phar require --prefer-dist chiliec/yii2-vote "*"
+php composer.phar require --prefer-dist chiliec/yii2-vote "~1.3"
 ```
 
 or add
 
 ```
-"chiliec/yii2-vote": "*"
+"chiliec/yii2-vote": "~1.3"
 ```
 
 to the require section of your `composer.json` file.
