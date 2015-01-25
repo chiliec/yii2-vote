@@ -108,7 +108,7 @@ class Rating extends ActiveRecord
                 $rating = 0;
             }
             $rating = round($rating*10, 2);
-            Yii::$app->cache->set('aggregate_rating'.$model_name.$target_id, $rating, 60*60); // кешируем на час
+            Yii::$app->cache->set('aggregate_rating'.$model_name.$target_id, $rating);
         }
 
         return ['likes'=>$likes, 'dislikes'=>$dislikes, 'aggregate_rating'=>$rating];
