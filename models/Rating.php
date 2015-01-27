@@ -9,7 +9,9 @@ namespace chiliec\vote\models;
 
 use Yii;
 use yii\base\InvalidParamException;
+use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use yii\db\Expression;
 
 /**
  * This is the model class for table "{{%rating}}".
@@ -29,6 +31,18 @@ class Rating extends ActiveRecord
     public static function tableName()
     {
         return '{{%rating}}';
+    }
+
+    public function behaviors()
+    {
+        return [
+            [
+                'class' => TimestampBehavior::className(),
+                'createdAtAttribute' => 'date',
+                'updatedAtAttribute' => 'date',
+                'value' => new Expression('NOW()'),
+            ],
+        ];
     }
 
     /**
