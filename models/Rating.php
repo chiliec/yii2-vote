@@ -40,7 +40,6 @@ class Rating extends ActiveRecord
                 'class' => TimestampBehavior::className(),
                 'createdAtAttribute' => 'date',
                 'updatedAtAttribute' => 'date',
-                'value' => new Expression('NOW()'),
             ],
         ];
     }
