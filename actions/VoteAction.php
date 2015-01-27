@@ -61,6 +61,7 @@ class VoteAction extends Action
                 $newVote->target_id = $target_id;
                 $newVote->user_id = (string)$user_id;
                 $newVote->value = $act;
+                $newVote->date = date('Y-m-d H:i:s');
                 if($newVote->save()) {
                     Yii::$app->cache->delete('aggregate_rating'.$model_name.$target_id);
                     if($act===1) {
