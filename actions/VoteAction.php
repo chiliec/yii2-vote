@@ -49,7 +49,7 @@ class VoteAction extends Action
                 return ['content' => Yii::t('vote', 'Wrong action'), 'successfully' => false];
             }
 
-            if(Yii::$app->getModule('vote')->allow_guests) {
+            if(Rating::getIsAllowGuests($model_name)) {
                 $isVoted = Rating::findOne(['model_id'=>$model_id, 'target_id'=>$target_id, 'user_ip'=>$user_ip]);
             } else {
                 $isVoted = Rating::findOne(['model_id'=>$model_id, 'target_id'=>$target_id, 'user_id'=>$user_id]);

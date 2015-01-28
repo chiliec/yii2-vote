@@ -29,22 +29,18 @@ Step 2: Configuring your application
 Add following lines to your main configuration file:
 
 ```php
-...
 'modules' => [
-    ...
 	'vote' => [
 		'class' => 'chiliec\vote\Module',
-		'matchingModels' => [ // matching model names with whatever integer ID
-			'article' => 0, 
-			'audio' => 1,
-			'video' => 2,
-			...
+		'allow_guests' => true, // if true will check IP, otherwise - UserID. Can be changed at any time
+		'matchingModels' => [ // matching model names with whatever unique integer ID
+			'article' => 0, // may be just integer value
+			'audio' => ['id'=>1], // or array with 'id' key
+			'video' => ['id'=>2, 'allow_guests'=>true], // or with own value of 'allow_guests' for any models
 		],
-		'allow_guests' => true, // if true remember IP for guests, otherwise - UserID
+		
 	],
-    ...
 ],
-...
 ```
 
 And add widget in view:

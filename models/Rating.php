@@ -78,12 +78,32 @@ class Rating extends ActiveRecord
      */
     public static function getModelIdByName($model_name)
     {
-        $models = Yii::$app->getModule('vote')->matchingModels;
-        if(in_array($model_name, $models)) {
-            return $models[$model_name];
-        } else {
-            return false;
+        $matchingModels = Yii::$app->getModule('vote')->matchingModels;
+        if(isset($matchingModels[$model_name])) {
+            if(is_array($matchingModels[$model_name])) {
+                if(isset($matchingModels[$model_name]['id'])) {
+                    return $matchingModels[$model_name]['id'];
+                }
+            } else {
+                return $matchingModels[$model_name];
+            }
         }
+        return false;
+    }
+
+    /**
+     * @param string $model_name Name of model
+     * @return boolean Checks exists permission for guest voting in model params or return global value
+     */
+    public static function getIsAllowGuests($model_name)
+    {
+        $matchingModels = Yii::$app->getModule('vote')->matchingModels;
+        if(isset($matchingModels[$model_name]) && is_array($matchingModels[$model_name])) {
+            if(array_key_exists('allow_guests', $matchingModels[$model_name])) {
+                return $matchingModels[$model_name]['allow_guests'];
+            }
+        }
+        return Yii::$app->getModule('vote')->allow_guests;
     }
 
     /**
