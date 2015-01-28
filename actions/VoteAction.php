@@ -23,17 +23,12 @@ class VoteAction extends Action
             $target_id = Yii::$app->request->getQueryParam('target_id');
             $act = Yii::$app->request->getQueryParam('act');
 
-            if(!Yii::$app->getModule('vote')->allow_guests) {
-                if(!Yii::$app->user->getIsGuest()) {
-                    $user_id = Yii::$app->user->getId();
-                } else {
-                    $user_id = null;
-                }
-            } else {
-                $user_id = Yii::$app->request->getUserIP();
+            $user_id = null;
+            if(!Yii::$app->user->getIsGuest()) {
+                $user_id = Yii::$app->user->getId();
             }
 
-            if($user_id==null) {
+            if(!$user_ip = Rating::compressIp(Yii::$app->request->getUserIP())) {
                 return ['content' => Yii::t('vote','The user is not recognized'), 'successfully' => false];
             }
 
@@ -54,12 +49,17 @@ class VoteAction extends Action
                 return ['content' => Yii::t('vote', 'Wrong action'), 'successfully' => false];
             }
 
-            $isVoted = Rating::findOne(['model_id'=>$model_id, 'target_id'=>$target_id, 'user_id'=>$user_id]);
+            if(Yii::$app->getModule('vote')->allow_guests) {
+                $isVoted = Rating::findOne(['model_id'=>$model_id, 'target_id'=>$target_id, 'user_ip'=>$user_ip]);
+            } else {
+                $isVoted = Rating::findOne(['model_id'=>$model_id, 'target_id'=>$target_id, 'user_id'=>$user_id]);
+            }
             if(is_null($isVoted)) {
                 $newVote = new Rating;
                 $newVote->model_id = $model_id;
                 $newVote->target_id = $target_id;
-                $newVote->user_id = (string)$user_id;
+                $newVote->user_id = $user_id;
+                $newVote->user_ip = $user_ip;
                 $newVote->value = $act;
                 if($newVote->save()) {
                     Yii::$app->cache->delete('aggregate_rating'.$model_name.$target_id);

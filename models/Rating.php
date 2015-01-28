@@ -11,15 +11,15 @@ use Yii;
 use yii\base\InvalidParamException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
-use yii\db\Expression;
 
 /**
  * This is the model class for table "{{%rating}}".
  *
- * @property string $id
+ * @property integer $id
  * @property integer $model_id
- * @property string $target_id
- * @property string $user_id
+ * @property integer $target_id
+ * @property integer $user_id
+ * @property string $user_ip
  * @property integer $value
  * @property integer $date
  */
@@ -50,10 +50,9 @@ class Rating extends ActiveRecord
     public function rules()
     {
         return [
-            [['model_id', 'target_id', 'user_id', 'value'], 'required'],
-            [['model_id', 'target_id', 'value'], 'integer'],
-            [['date'], 'safe'],
-            [['user_id'], 'string', 'max' => 16]
+            [['model_id', 'target_id', 'user_ip', 'value'], 'required'],
+            [['model_id', 'target_id', 'user_id', 'value'], 'integer'],
+            [['user_ip'], 'string', 'max' => 39]
         ];
     }
 
@@ -67,6 +66,7 @@ class Rating extends ActiveRecord
             'model_id' => 'Model ID',
             'target_id' => 'Target ID',
             'user_id' => 'User ID',
+            'user_ip' => 'User IP',
             'value' => 'Value',
             'date' => 'Date',
         ];
@@ -126,4 +126,24 @@ class Rating extends ActiveRecord
 
         return ['likes'=>$likes, 'dislikes'=>$dislikes, 'aggregate_rating'=>$rating];
     }
+
+    /**
+     * Converts a printable IP into an unpacked binary string
+     *
+     * @author Mike Mackintosh - mike@bakeryphp.com
+     * @link http://www.highonphp.com/5-tips-for-working-with-ipv6-in-php
+     * @param string $ip
+     * @return string $bin
+     */
+    public static function compressIp($ip)
+    {
+        if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)){
+            return current(unpack('A4', inet_pton($ip)));
+        }
+        elseif(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)){
+            return current(unpack('A16', inet_pton($ip)));
+        }
+        return false;
+    }
+
 }
