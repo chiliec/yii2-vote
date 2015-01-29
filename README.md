@@ -53,9 +53,14 @@ And add widget in view:
 	'model_name' => 'article', // name of current model
 	'target_id' => $model->id, // id of current element
 	// optional fields
+	'view_aggregate_rating' => true, // set true to show aggregate_rating
+	'mainDivOptions' => ['class' => 'text-center'], // div options
+	'classLike' => 'glyphicon glyphicon-thumbs-up', // class for like button
+	'classDislike' => 'glyphicon glyphicon-thumbs-down', // class for dislike button
+	'separator' = '&nbsp;', // separator between like and dislike button
 	'js_before_vote' => 'alert("before_vote")', // your javascript before vote
 	'js_after_vote' => 'alert("after_vote")', // your javascript after vote
-	'js_result' => '', // overwrite js functional, [see here](https://github.com/Chiliec/yii2-vote/blob/master/Display.php#L46)
+	'js_result' => '', // for overwrite js functional
 ]); ?>
 ```
 
@@ -70,49 +75,7 @@ $ php yii migrate/up --migrationPath=@vendor/chiliec/yii2-vote/migrations
 
 That's all! 
 
-Customize display
------------------
-Although view of these widget are not configurable, Yii2 provides a way to override views using themes. To get started you should configure your view application component as follows:
 
-```php
-...
-'components' => [
-    'view' => [
-        'theme' => [
-            'pathMap' => [
-                '@chiliec/vote/views' => '@app/views/vote'
-            ],
-        ],
-    ],
-],
-...
-```
-
-In the above `pathMap` means that every view in `@chiliec/vote/views` will be first searched under `@app/views/vote`. Because of that create file `display.php` in `app/views/vote`, put these code and decorate it as you wish:
-
-```php
-<div id="vote-<?=$model_name.$target_id;?>" style="text-align: center;">
-    <span id="vote-up-<?=$model_name.$target_id;?>" class="glyphicon glyphicon-thumbs-up" onclick="vote('<?=$model_name;?>',<?=$target_id;?>,'like'); return false;" style="cursor:pointer;"><?=$rating['likes'];?></span>&nbsp;
-    <span id="vote-down-<?=$model_name.$target_id;?>" class="glyphicon glyphicon-thumbs-down" onclick="vote('<?=$model_name;?>',<?=$target_id;?>,'dislike'); return false;" style="cursor:pointer;"><?=$rating['dislikes'];?></span>
-    <div id="vote-response-<?=$model_name.$target_id;?>"><?=\Yii::t('vote', 'Aggregate rating');?>: <?=$rating['aggregate_rating'];?></div>
-</div>
-```
-
-Identifiers should be left (javascript logic is fastened on them), but you can change name of tags and classes.
-
-For example, you can markup with [schema.org](http://schema.org/AggregateRating) synthax for help search engines recognize it:
-
-```php
-<div id="vote-<?=$model_name.$target_id;?>" style="text-align: center;">
-    <span id="vote-up-<?=$model_name.$target_id;?>" class="glyphicon glyphicon-thumbs-up" onclick="vote('<?=$model_name;?>',<?=$target_id;?>,'like'); return false;" style="cursor:pointer;"><?=$rating['likes'];?></span>&nbsp;
-    <span id="vote-down-<?=$model_name.$target_id;?>" class="glyphicon glyphicon-thumbs-down" onclick="vote('<?=$model_name;?>',<?=$target_id;?>,'dislike'); return false;" style="cursor:pointer;"><?=$rating['dislikes'];?></span>
-    <div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating" id="vote-response-<?=$model_name.$target_id;?>">
-        <meta itemprop="bestRating" content="10" />
-        <meta itemprop="worstRating" content="0" />
-        <?=\Yii::t('vote', 'Aggregate rating');?>: <span itemprop="ratingValue"><?=$rating['aggregate_rating'];?> based on <span itemprop="ratingCount"><?=$rating['likes']+$rating['dislikes'];?></span> reviews
-    </div>
-</div>
-````
 
 How to store rating in database
 -------------------------------
