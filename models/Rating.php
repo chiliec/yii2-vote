@@ -79,12 +79,11 @@ class Rating extends ActiveRecord
     public static function getModelIdByName($model_name)
     {
         $matchingModels = Yii::$app->getModule('vote')->matchingModels;
+        if(isset($matchingModels[$model_name]['id'])) {
+            return $matchingModels[$model_name]['id'];
+        }
         if(isset($matchingModels[$model_name])) {
-            if(is_array($matchingModels[$model_name]) && isset($matchingModels[$model_name]['id'])) {
-                return $matchingModels[$model_name]['id'];
-            } else {
-                return $matchingModels[$model_name];
-            }
+            return $matchingModels[$model_name];
         }
         return false;
     }
