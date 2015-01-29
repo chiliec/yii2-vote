@@ -103,8 +103,7 @@ function vote(model, target, act){
     jQuery.ajax({ url: '$this->vote_url', type: 'POST', dataType: 'json', cache: false,
         data: { model_name: model, target_id: target, act: act},
         beforeSend: function(jqXHR, settings) { $this->js_before_vote },
-        complete: function(jqXHR, textStatus) { $this->js_after_vote },
-        success: function(data, textStatus, jqXHR) { $this->js_result }
+        success: function(data, textStatus, jqXHR) { $this->js_result $this->js_after_vote }
     });
 }";
         $this->view->registerJs($js, View::POS_END);
