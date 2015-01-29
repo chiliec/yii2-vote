@@ -95,7 +95,7 @@ class Display extends Widget
         }
 
         if(!isset($this->vote_url)) {
-            $this->vote_url = Yii::$app->getUrlManager()->createUrl(['vote']);
+            $this->vote_url = Yii::$app->getUrlManager()->createUrl(['vote/default/vote']);
         }
 
         $js = "
