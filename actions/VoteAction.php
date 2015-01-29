@@ -19,34 +19,30 @@ class VoteAction extends Action
     {
         if(Yii::$app->request->getIsAjax()) {
             Yii::$app->response->format = Response::FORMAT_JSON;
-            $model_name = Yii::$app->request->getQueryParam('model_name');
-            $target_id = Yii::$app->request->getQueryParam('target_id');
-            $act = Yii::$app->request->getQueryParam('act');
 
-            $user_id = null;
-            if(!Yii::$app->user->getIsGuest()) {
-                $user_id = Yii::$app->user->getId();
+            if(null === $model_name = Yii::$app->request->post('model_name')) {
+                return ['content' => Yii::t('vote', 'Model name has not been sent')];
             }
 
+            if(null === $target_id = Yii::$app->request->post('target_id')) {
+                return ['content' => Yii::t('vote', 'The purpose is not defined')];
+            }
+
+            $act = Yii::$app->request->post('act');
+            if(!in_array($act, ['like','dislike'], true)) {
+                return ['content' => Yii::t('vote', 'Wrong action')];
+            }
+            $value = $act==='like' ? 1 : 0;
+
+            $user_id = Yii::$app->user->getId();
+
             if(!$user_ip = Rating::compressIp(Yii::$app->request->getUserIP())) {
-                return ['content' => Yii::t('vote','The user is not recognized'), 'successfully' => false];
+                return ['content' => Yii::t('vote', 'The user is not recognized')];
             }
 
             $model_id = Rating::getModelIdByName($model_name);
             if(!is_int($model_id)) {
-                return ['content' => Yii::t('vote','The model is not registered'), 'successfully' => false];
-            }
-
-            if($target_id==null) {
-                return ['content' => Yii::t('vote', 'The purpose is not defined'), 'successfully' => false];
-            }
-
-            if($act=='like'){
-                $act = 1;
-            } elseif($act=='dislike') {
-                $act = 0;
-            } else {
-                return ['content' => Yii::t('vote', 'Wrong action'), 'successfully' => false];
+                return ['content' => Yii::t('vote', 'The model is not registered')];
             }
 
             if(Rating::getIsAllowGuests($model_name)) {
@@ -60,28 +56,29 @@ class VoteAction extends Action
                 $newVote->target_id = $target_id;
                 $newVote->user_id = $user_id;
                 $newVote->user_ip = $user_ip;
-                $newVote->value = $act;
+                $newVote->value = $value;
                 if($newVote->save()) {
                     Yii::$app->cache->delete('aggregate_rating'.$model_name.$target_id);
-                    if($act===1) {
+                    if($value===1) {
                         Yii::$app->cache->delete('likes'.$model_name.$target_id);
-                        return ['content' => Yii::t('vote', 'Your vote is accepted. Thanks!'), 'successfully' => true];
+                        return ['content' => Yii::t('vote', 'Your vote is accepted. Thanks!'), 'success' => true];
                     } else {
                         Yii::$app->cache->delete('dislikes'.$model_name.$target_id);
-                        return ['content' => Yii::t('vote', 'Thanks for your opinion'), 'successfully' => true];
+                        return ['content' => Yii::t('vote', 'Thanks for your opinion'), 'success' => true];
                     }
                 } else {
-                    return ['content' => Yii::t('vote', 'Validation error'), 'successfully' => false];
+                    return ['content' => Yii::t('vote', 'Validation error')];
                 }
             } else {
-                if($isVoted->value == $act) {
-                    return ['content' => Yii::t('vote', 'You have already voted!'), 'successfully' => false];
-                } else {
-                    $isVoted->value = $act;
+                if($isVoted->value !== $value && Yii::$app->getModule('vote')->allow_change_vote) {
+                    $isVoted->value = $value;
                     if($isVoted->save()) {
-                        return ['content' => Yii::t('vote', 'Your vote has been changed. Thanks!'), 'successfully' => true];
+                        return ['content' => Yii::t('vote', 'Your vote has been changed. Thanks!'), 'success' => true, 'changed' => true];
+                    } else {
+                        return ['content' => Yii::t('vote', 'Validation error')];
                     }
                 }
+                return ['content' => Yii::t('vote', 'You have already voted!')];
             }
         } else {
             throw new MethodNotAllowedHttpException(Yii::t('vote', 'Forbidden method'), 405);

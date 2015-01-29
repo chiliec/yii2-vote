@@ -15,13 +15,19 @@ class Module extends \yii\base\Module
     public $controllerNamespace = 'chiliec\vote\controllers';
 
     /**
-     * Разешить голосовать гостям?
+     * Is allow vote for guests
      * @var bool
      */
     public $allow_guests = true;
 
     /**
-     * Сопоставление моделей с их id
+     * Is allow change votes
+     * @var bool
+     */
+    public $allow_change_vote = true;
+
+    /**
+     * Matching models with ids
      * @var array
      */
     public $matchingModels;

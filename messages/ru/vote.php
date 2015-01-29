@@ -16,5 +16,7 @@ return [
     'Validation error' => 'Ошибка валидации',
     'You have already voted!' => 'Вы уже голосовали!',
     'Forbidden method' => 'Запрещенный метод',
-    'Aggregate rating' => 'Совокупный рейтинг'
+    'Aggregate rating' => 'Совокупный рейтинг',
+    'Model name has not been sent' => 'Не передано имя модели',
+    'Target id has not been sent' => 'Не передано id цели',
 ];

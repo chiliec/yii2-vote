@@ -80,10 +80,8 @@ class Rating extends ActiveRecord
     {
         $matchingModels = Yii::$app->getModule('vote')->matchingModels;
         if(isset($matchingModels[$model_name])) {
-            if(is_array($matchingModels[$model_name])) {
-                if(isset($matchingModels[$model_name]['id'])) {
-                    return $matchingModels[$model_name]['id'];
-                }
+            if(is_array($matchingModels[$model_name]) && isset($matchingModels[$model_name]['id'])) {
+                return $matchingModels[$model_name]['id'];
             } else {
                 return $matchingModels[$model_name];
             }

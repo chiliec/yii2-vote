@@ -28,11 +28,14 @@ Step 2: Configuring your application
 
 Add following lines to your main configuration file:
 
+Attention: this configuration works only with dev-master version. Configuration for last stable version [see here](https://github.com/Chiliec/yii2-vote/tree/1.4).
+
 ```php
 'modules' => [
 	'vote' => [
 		'class' => 'chiliec\vote\Module',
 		'allow_guests' => true, // if true will check IP, otherwise - UserID. Can be changed at any time
+		'allow_change_vote' => true, // if true vote can be changed
 		'matchingModels' => [ // matching model names with whatever unique integer ID
 			'article' => 0, // may be just integer value
 			'audio' => ['id'=>1], // or array with 'id' key
