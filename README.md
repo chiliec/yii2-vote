@@ -52,6 +52,10 @@ And add widget in view:
 <?php echo \chiliec\vote\Display::widget([
 	'model_name' => 'article', // name of current model
 	'target_id' => $model->id, // id of current element
+	// optional fields
+	'js_before_vote' => 'alert("before_vote")', // your javascript before vote
+	'js_after_vote' => 'alert("after_vote")', // your javascript after vote
+	'js_result' => '', // overwrite js functional, [see here](https://github.com/Chiliec/yii2-vote/blob/master/Display.php#L46)
 ]); ?>
 ```
 
