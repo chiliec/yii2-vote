@@ -55,7 +55,7 @@ And add widget in view:
 	'mainDivOptions' => ['class' => 'text-center'], // div options
 	'classLike' => 'glyphicon glyphicon-thumbs-up', // class for like button
 	'classDislike' => 'glyphicon glyphicon-thumbs-down', // class for dislike button
-	'separator' = '&nbsp;', // separator between like and dislike button
+	'separator' => '&nbsp;', // separator between like and dislike button
 ]); ?>
 ```
 
