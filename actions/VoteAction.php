@@ -35,6 +35,9 @@ class VoteAction extends Action
             $value = $act==='like' ? 1 : 0;
 
             $user_id = Yii::$app->user->getId();
+            if($user_id === null && !Rating::getIsAllowGuests($model_name)) {
+                return ['content' => Yii::t('vote', 'Guests are not allowed to vote')];
+            }
 
             if(!$user_ip = Rating::compressIp(Yii::$app->request->getUserIP())) {
                 return ['content' => Yii::t('vote', 'The user is not recognized')];
@@ -58,19 +61,17 @@ class VoteAction extends Action
                 $newVote->user_ip = $user_ip;
                 $newVote->value = $value;
                 if($newVote->save()) {
-                    Yii::$app->cache->delete('aggregate_rating'.$model_name.$target_id);
+                    Yii::$app->cache->delete('rating'.$model_name.$target_id);
                     if($value===1) {
-                        Yii::$app->cache->delete('likes'.$model_name.$target_id);
                         return ['content' => Yii::t('vote', 'Your vote is accepted. Thanks!'), 'success' => true];
                     } else {
-                        Yii::$app->cache->delete('dislikes'.$model_name.$target_id);
                         return ['content' => Yii::t('vote', 'Thanks for your opinion'), 'success' => true];
                     }
                 } else {
                     return ['content' => Yii::t('vote', 'Validation error')];
                 }
             } else {
-                if($isVoted->value !== $value && Yii::$app->getModule('vote')->allow_change_vote) {
+                if($isVoted->value !== $value && Rating::getIsAllowChangeVote($model_name)) {
                     $isVoted->value = $value;
                     if($isVoted->save()) {
                         return ['content' => Yii::t('vote', 'Your vote has been changed. Thanks!'), 'success' => true, 'changed' => true];

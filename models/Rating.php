@@ -95,40 +95,40 @@ class Rating extends ActiveRecord
     public static function getIsAllowGuests($model_name)
     {
         $matchingModels = Yii::$app->getModule('vote')->matchingModels;
-        if(isset($matchingModels[$model_name]) && is_array($matchingModels[$model_name])) {
-            if(array_key_exists('allow_guests', $matchingModels[$model_name])) {
-                return $matchingModels[$model_name]['allow_guests'];
-            }
+        if(isset($matchingModels[$model_name]['allow_guests'])) {
+            return $matchingModels[$model_name]['allow_guests'];
         }
         return Yii::$app->getModule('vote')->allow_guests;
     }
 
     /**
      * @param string $model_name Name of model
-     * @param integer $target_id Current value of primary key
-     * @return array
+     * @return boolean Checks exists permission for change vote in model params or return global value
      */
-    public function getRating($model_name, $target_id)
+    public static function getIsAllowChangeVote($model_name)
     {
-        $model_id = $this->getModelIdByName($model_name);
+        $matchingModels = Yii::$app->getModule('vote')->matchingModels;
+        if(isset($matchingModels[$model_name]['allow_change_vote'])) {
+            return $matchingModels[$model_name]['allow_change_vote'];
+        }
+        return Yii::$app->getModule('vote')->allow_change_vote;
+    }
+
+    /**
+     * @param string $model_name Name of model
+     * @param integer $target_id Current value of primary key
+     * @return array ['likes', 'dislikes', 'aggregate_rating']
+     */
+    public static function getRating($model_name, $target_id)
+    {
+        $model_id = self::getModelIdByName($model_name);
         if(!is_int($model_id)) {
-            throw new InvalidParamException('Model name not recognized');
+            throw new InvalidParamException(Yii::t('vote', 'The model is not registered'));
         }
-
-        $likes = Yii::$app->cache->get('likes'.$model_name.$target_id);
-        if($likes === false) {
-            $likes = $this->find()->where(['model_id'=>$model_id, 'target_id'=>$target_id, 'value'=>1])->count();
-            Yii::$app->cache->set('likes'.$model_name.$target_id, $likes);
-        }
-
-        $dislikes = Yii::$app->cache->get('dislikes'.$model_name.$target_id);
-        if($dislikes === false) {
-            $dislikes = $this->find()->where(['model_id'=>$model_id, 'target_id'=>$target_id, 'value'=>0])->count();
-            Yii::$app->cache->set('dislikes'.$model_name.$target_id, $dislikes);
-        }
-
-        $rating = Yii::$app->cache->get('aggregate_rating'.$model_name.$target_id);
-        if ($rating === false) {
+        $result = Yii::$app->cache->get('rating'.$model_name.$target_id);
+        if($result === false) {
+            $likes = self::find()->where(['model_id'=>$model_id, 'target_id'=>$target_id, 'value'=>1])->count();
+            $dislikes = self::find()->where(['model_id'=>$model_id, 'target_id'=>$target_id, 'value'=>0])->count();
             if ($likes+$dislikes != 0) {
                 // Рейтинг = Нижняя граница доверительного интервала Вильсона (Wilson) для параметра Бернулли
                 // http://habrahabr.ru/company/darudar/blog/143188/
@@ -138,10 +138,10 @@ class Rating extends ActiveRecord
                 $rating = 0;
             }
             $rating = round($rating*10, 2);
-            Yii::$app->cache->set('aggregate_rating'.$model_name.$target_id, $rating);
+            $result = ['likes'=>$likes, 'dislikes'=>$dislikes, 'aggregate_rating'=>$rating];
+            Yii::$app->cache->set('rating'.$model_name.$target_id, $result);
         }
-
-        return ['likes'=>$likes, 'dislikes'=>$dislikes, 'aggregate_rating'=>$rating];
+        return $result;
     }
 
     /**

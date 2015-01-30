@@ -126,10 +126,9 @@ function vote(model, target, act){
 
     public function run()
     {
-        $rating = new Rating();
         $target_id = $this->target_id;
         $model_name = $this->model_name;
-        $rating = $rating->getRating($this->model_name, $this->target_id);
+        $rating = Rating::getRating($this->model_name, $this->target_id);
         $id = $model_name . $target_id;
         $content  = Html::beginTag('div', $this->mainDivOptions);
         $content .= Html::tag('span', $rating['likes'], ['id'=>"vote-up-$id", 'class' => $this->classLike, 'onclick' => "vote('$model_name',$target_id,'like');return false;", 'style' => 'cursor:pointer;']);

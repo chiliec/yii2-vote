@@ -7,6 +7,7 @@
 
 return [
     'The user is not recognized' => 'Пользователь не распознан',
+    'Guests are not allowed to vote' => 'Гостям не разрешено голосовать',
     'The model is not registered' => 'Модель не зарегистрирована!',
     'The purpose is not defined' => 'Цель не определена',
     'Wrong action' => 'Неправильное действие!',

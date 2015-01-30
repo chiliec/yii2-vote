@@ -11,13 +11,13 @@ Step 1: Install component via composer
 Run command
 
 ```
-php composer.phar require --prefer-dist chiliec/yii2-vote "~1.3"
+php composer.phar require --prefer-dist chiliec/yii2-vote "~2.0"
 ```
 
 or add
 
 ```
-"chiliec/yii2-vote": "~1.3"
+"chiliec/yii2-vote": "~2.0"
 ```
 
 to the require section of your `composer.json` file.
@@ -28,20 +28,18 @@ Step 2: Configuring your application
 
 Add following lines to your main configuration file:
 
-Attention: this configuration works only with dev-master version. Configuration for last stable version [see here](https://github.com/Chiliec/yii2-vote/tree/1.4).
-
 ```php
 'modules' => [
 	'vote' => [
 		'class' => 'chiliec\vote\Module',
-		'allow_guests' => true, // if true will check IP, otherwise - UserID. Can be changed at any time
+		'allow_guests' => true, // if true will check IP, otherwise - UserID
 		'allow_change_vote' => true, // if true vote can be changed
 		'matchingModels' => [ // matching model names with whatever unique integer ID
 			'article' => 0, // may be just integer value
 			'audio' => ['id'=>1], // or array with 'id' key
-			'video' => ['id'=>2, 'allow_guests'=>true], // or with own value of 'allow_guests' for any models
-		],
-		
+			'video' => ['id'=>2, 'allow_guests'=>false], // own value 'allow_guests'
+			'photo' => ['id'=>3, 'allow_guests'=>false, 'allow_change_vote'=>false],
+		],		
 	],
 ],
 ```
@@ -58,9 +56,6 @@ And add widget in view:
 	'classLike' => 'glyphicon glyphicon-thumbs-up', // class for like button
 	'classDislike' => 'glyphicon glyphicon-thumbs-down', // class for dislike button
 	'separator' = '&nbsp;', // separator between like and dislike button
-	'js_before_vote' => 'alert("before_vote")', // your javascript before vote
-	'js_after_vote' => 'alert("after_vote")', // your javascript after vote
-	'js_result' => '', // for overwrite js functional
 ]); ?>
 ```
 
@@ -116,7 +111,7 @@ For example, if you want to use [noty jQuery plugin](https://github.com/needim/n
 
 ```php
 <?php echo \chiliec\vote\Display::widget([
-	'model_name' => 'Article',
+	'model_name' => 'article',
 	'target_id' => $model->id,
 	'js_show_message' => "
 		message = data.content;

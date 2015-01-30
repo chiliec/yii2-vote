@@ -37,8 +37,7 @@ class RatingBehavior extends Behavior
 
     public function afterFind($event)
     {
-        $model = new Rating();
-        if($received_rating = $model->getRating($this->model_name, $this->owner->id)) {
+        if($received_rating = Rating::getRating($this->model_name, $this->owner->id)) {
             $rating = $received_rating['likes'] - $received_rating['dislikes'];
             $aggregate_rating = $received_rating['aggregate_rating'];
             if(($this->owner->{$this->rating_field} != $rating) or ($this->owner->{$this->aggregate_rating_field} != $aggregate_rating)) {
