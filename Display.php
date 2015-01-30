@@ -69,7 +69,21 @@ class Display extends Widget
     /**
      * @var string
      */
-    public $js_result = "
+    public $js_error_vote = "
+            jQuery('#vote-response-'+model+target).html(errorThrown);
+    ";
+
+    /**
+     * @var string
+     */
+    public $js_show_message = "
+            jQuery('#vote-response-'+model+target).html(data.content);
+    ";
+
+    /**
+     * @var string
+     */
+    public $js_change_counters = "
             if(typeof(data.success)!=='undefined') {
                 if(act==='like') {
                     jQuery('#vote-up-'+model+target).text(parseInt(jQuery('#vote-up-'+model+target).text()) + 1);
@@ -84,7 +98,6 @@ class Display extends Widget
                     }
                 }
             }
-            jQuery('#vote-response-'+model+target).html(data.content);
     ";
 
     public function init()
@@ -103,7 +116,9 @@ function vote(model, target, act){
     jQuery.ajax({ url: '$this->vote_url', type: 'POST', dataType: 'json', cache: false,
         data: { model_name: model, target_id: target, act: act},
         beforeSend: function(jqXHR, settings) { $this->js_before_vote },
-        success: function(data, textStatus, jqXHR) { $this->js_result $this->js_after_vote }
+        success: function(data, textStatus, jqXHR) { $this->js_change_counters $this->js_show_message },
+        complete: function(jqXHR, textStatus) { $this->js_after_vote },
+        error: function(jqXHR, textStatus, errorThrown) { $this->js_error_vote }
     });
 }";
         $this->view->registerJs($js, View::POS_END);

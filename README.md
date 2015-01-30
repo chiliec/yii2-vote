@@ -75,7 +75,7 @@ $ php yii migrate/up --migrationPath=@vendor/chiliec/yii2-vote/migrations
 
 That's all! 
 
-
+-------------------------------
 
 How to store rating in database
 -------------------------------
@@ -98,10 +98,42 @@ After that, add new behavior in target model:
                 'class' => \chiliec\vote\behaviors\RatingBehavior::className(),
                 'model_name' => 'story', // name of this model
             ],
-        // ...
         ];
     }
 ```
 
+Customizing JS-events
+--------------------------
+If you want to customize JS-events, you can rewrite widget properties:
+
+* `js_before_vote` by default is not defined. Called before vote.
+* `js_change_counters` responsible for change counters. Available `data` property (may contains `content`, `success` and `changed` properties).
+* `js_show_message` responsible for show message. Available `data` property too.
+* `js_after_vote` by default is not defined. Called after vote.
+* `js_error_vote` called if the request fails. Available `errorThrown`, contains error message.
+
+For example, if you want to use [noty jQuery plugin](https://github.com/needim/noty) for show notifications, you may rewrite `js_show_message`:
+
+```php
+<?php echo \chiliec\vote\Display::widget([
+	'model_name' => 'Article',
+	'target_id' => $model->id,
+	'js_show_message' => "
+		message = data.content;
+		type = 'error';
+		if(typeof(data.success)!=='undefined') { type = 'success'; }
+		if(typeof(data.changed)!=='undefined') { type = 'information'; }
+		noty({
+			text: message,
+			type: type,
+			layout: 'topRight',
+			timeout: 1500,
+			force: true
+		});
+	",
+]);
+```
+
+-------------------------------
 
 Enjoy and don't forget to send me your [Issues](https://github.com/Chiliec/yii2-vote/issues) and Pull Requests :)
