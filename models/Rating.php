@@ -163,4 +163,19 @@ class Rating extends ActiveRecord
         return false;
     }
 
+    /**
+     * Converts an unpacked binary string into a printable IP
+     *
+     * @author Mike Mackintosh - mike@bakeryphp.com
+     * @link http://www.highonphp.com/5-tips-for-working-with-ipv6-in-php
+     * @param string $str
+     * @return string $ip
+     */
+    public static function expandIp($str){
+        if (strlen($str) == 16 OR strlen($str) == 4 ){
+            return inet_ntop(pack("A".strlen($str), $str));
+        }
+        return false;
+    }
+
 }
