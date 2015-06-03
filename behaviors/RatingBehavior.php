@@ -37,10 +37,10 @@ class RatingBehavior extends Behavior
 
     public function afterFind($event)
     {
-        if($received_rating = Rating::getRating($this->model_name, $this->owner->id)) {
+        if ($received_rating = Rating::getRating($this->model_name, $this->owner->{$this->owner->primaryKey()[0]})) {
             $rating = $received_rating['likes'] - $received_rating['dislikes'];
             $aggregate_rating = $received_rating['aggregate_rating'];
-            if(($this->owner->{$this->rating_field} != $rating) or ($this->owner->{$this->aggregate_rating_field} != $aggregate_rating)) {
+            if (($this->owner->{$this->rating_field} != $rating) or ($this->owner->{$this->aggregate_rating_field} != $aggregate_rating)) {
                 \Yii::$app->db->createCommand()->update(
                     $this->owner->tableName(),
                     [$this->rating_field => $rating, $this->aggregate_rating_field => $aggregate_rating],
