@@ -35,10 +35,10 @@ class Module extends \yii\base\Module
     public function init()
     {
         parent::init();
-        if(!isset($this->matchingModels)) {
+        if (!isset($this->matchingModels)) {
             throw new InvalidConfigException('matchingModels not configurated');
         }
-        if(empty(Yii::$app->i18n->translations['vote'])) {
+        if (empty(Yii::$app->i18n->translations['vote'])) {
             Yii::$app->i18n->translations['vote'] = [
                 'class' => 'yii\i18n\PhpMessageSource',
                 'sourceLanguage' => 'en-US',

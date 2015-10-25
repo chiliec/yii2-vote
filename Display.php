@@ -84,14 +84,14 @@ class Display extends Widget
      * @var string
      */
     public $js_change_counters = "
-            if(typeof(data.success)!=='undefined') {
-                if(act==='like') {
+            if (typeof(data.success) !== 'undefined') {
+                if (act === 'like') {
                     jQuery('#vote-up-'+model+target).text(parseInt(jQuery('#vote-up-'+model+target).text()) + 1);
                 } else {
                     jQuery('#vote-down-'+model+target).text(parseInt(jQuery('#vote-down-'+model+target).text()) + 1);
                 }
-                if(typeof(data.changed)!=='undefined') {
-                    if(act==='like') {
+                if (typeof(data.changed) !== 'undefined') {
+                    if (act === 'like') {
                         jQuery('#vote-down-'+model+target).text(parseInt(jQuery('#vote-down-'+model+target).text()) - 1);
                     } else {
                         jQuery('#vote-up-'+model+target).text(parseInt(jQuery('#vote-up-'+model+target).text()) - 1);
@@ -103,11 +103,11 @@ class Display extends Widget
     public function init()
     {
         parent::init();
-        if(!isset($this->model_name) or !isset($this->target_id)) {
+        if (!isset($this->model_name) or !isset($this->target_id)) {
             throw new InvalidParamException(Yii::t('vote', 'model_name or target_id not configurated'));
         }
 
-        if(!isset($this->vote_url)) {
+        if (!isset($this->vote_url)) {
             $this->vote_url = Yii::$app->getUrlManager()->createUrl(['vote/default/vote']);
         }
 

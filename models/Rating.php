@@ -79,10 +79,10 @@ class Rating extends ActiveRecord
     public static function getModelIdByName($model_name)
     {
         $matchingModels = Yii::$app->getModule('vote')->matchingModels;
-        if(isset($matchingModels[$model_name]['id'])) {
+        if (isset($matchingModels[$model_name]['id'])) {
             return $matchingModels[$model_name]['id'];
         }
-        if(isset($matchingModels[$model_name])) {
+        if (isset($matchingModels[$model_name])) {
             return $matchingModels[$model_name];
         }
         return false;
@@ -95,7 +95,7 @@ class Rating extends ActiveRecord
     public static function getIsAllowGuests($model_name)
     {
         $matchingModels = Yii::$app->getModule('vote')->matchingModels;
-        if(isset($matchingModels[$model_name]['allow_guests'])) {
+        if (isset($matchingModels[$model_name]['allow_guests'])) {
             return $matchingModels[$model_name]['allow_guests'];
         }
         return Yii::$app->getModule('vote')->allow_guests;
@@ -108,7 +108,7 @@ class Rating extends ActiveRecord
     public static function getIsAllowChangeVote($model_name)
     {
         $matchingModels = Yii::$app->getModule('vote')->matchingModels;
-        if(isset($matchingModels[$model_name]['allow_change_vote'])) {
+        if (isset($matchingModels[$model_name]['allow_change_vote'])) {
             return $matchingModels[$model_name]['allow_change_vote'];
         }
         return Yii::$app->getModule('vote')->allow_change_vote;
@@ -122,11 +122,11 @@ class Rating extends ActiveRecord
     public static function getRating($model_name, $target_id)
     {
         $model_id = self::getModelIdByName($model_name);
-        if(!is_int($model_id)) {
+        if (!is_int($model_id)) {
             throw new InvalidParamException(Yii::t('vote', 'The model is not registered'));
         }
         $result = Yii::$app->cache->get('rating'.$model_name.$target_id);
-        if($result === false) {
+        if ($result === false) {
             $likes = self::find()->where(['model_id'=>$model_id, 'target_id'=>$target_id, 'value'=>1])->count();
             $dislikes = self::find()->where(['model_id'=>$model_id, 'target_id'=>$target_id, 'value'=>0])->count();
             if ($likes+$dislikes != 0) {
@@ -154,10 +154,10 @@ class Rating extends ActiveRecord
      */
     public static function compressIp($ip)
     {
-        if(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)){
+        if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
             return current(unpack('A4', inet_pton($ip)));
         }
-        elseif(filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)){
+        elseif (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
             return current(unpack('A16', inet_pton($ip)));
         }
         return false;
@@ -171,8 +171,8 @@ class Rating extends ActiveRecord
      * @param string $str
      * @return string $ip
      */
-    public static function expandIp($str){
-        if (strlen($str) == 16 OR strlen($str) == 4 ){
+    public static function expandIp($str) {
+        if (strlen($str) == 16 OR strlen($str) == 4) {
             return inet_ntop(pack("A".strlen($str), $str));
         }
         return false;

@@ -116,8 +116,8 @@ For example, if you want to use [noty jQuery plugin](https://github.com/needim/n
 	'js_show_message' => "
 		message = data.content;
 		type = 'error';
-		if(typeof(data.success)!=='undefined') { type = 'success'; }
-		if(typeof(data.changed)!=='undefined') { type = 'information'; }
+		if (typeof(data.success) !== 'undefined') { type = 'success'; }
+		if (typeof(data.changed) !== 'undefined') { type = 'information'; }
 		noty({
 			text: message,
 			type: type,
