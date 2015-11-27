@@ -65,7 +65,10 @@ class Display extends Widget
      * @var string
      */
     public $js_after_vote;
-
+    /**
+     * @var string
+     */
+    public $js_code_key='vote';
     /**
      * @var string
      */
@@ -121,7 +124,7 @@ function vote(model, target, act){
         error: function(jqXHR, textStatus, errorThrown) { $this->js_error_vote }
     });
 }";
-        $this->view->registerJs($js, View::POS_END);
+        $this->view->registerJs($js, View::POS_END, $this->js_code_key);
     }
 
     public function run()
