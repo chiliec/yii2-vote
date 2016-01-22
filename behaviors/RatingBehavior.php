@@ -16,17 +16,17 @@ class RatingBehavior extends Behavior
     /**
      * @var string Name of model
      */
-    public $model_name;
+    public $modelName;
 
     /**
      * @var string Field for rating in database
      */
-    public $rating_field = 'rating';
+    public $ratingField = 'rating';
 
     /**
      * @var string Field for aggregate_rating in database
      */
-    public $aggregate_rating_field = 'aggregate_rating';
+    public $aggregateRatingField = 'aggregate_rating';
 
     public function events()
     {
@@ -37,13 +37,13 @@ class RatingBehavior extends Behavior
 
     public function afterFind($event)
     {
-        if ($received_rating = Rating::getRating($this->model_name, $this->owner->{$this->owner->primaryKey()[0]})) {
-            $rating = $received_rating['likes'] - $received_rating['dislikes'];
-            $aggregate_rating = $received_rating['aggregate_rating'];
-            if (($this->owner->{$this->rating_field} != $rating) or ($this->owner->{$this->aggregate_rating_field} != $aggregate_rating)) {
+        if ($receivedRating = Rating::getRating($this->modelName, $this->owner->{$this->owner->primaryKey()[0]})) {
+            $rating = $receivedRating['likes'] - $receivedRating['dislikes'];
+            $aggregateRating = $receivedRating['rating'];
+            if (($this->owner->{$this->ratingField} !== $rating) || ($this->owner->{$this->aggregateRatingField} !== $aggregateRating)) {
                 \Yii::$app->db->createCommand()->update(
                     $this->owner->tableName(),
-                    [$this->rating_field => $rating, $this->aggregate_rating_field => $aggregate_rating],
+                    [$this->ratingField => $rating, $this->aggregateRatingField => $aggregateRating],
                     [$this->owner->primaryKey()[0] => $this->owner->{$this->owner->primaryKey()[0]}]
                 )->execute();
             }

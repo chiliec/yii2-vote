@@ -18,16 +18,16 @@ class Module extends \yii\base\Module
      * Is allow vote for guests
      * @var bool
      */
-    public $allow_guests = true;
+    public $allowGuests = true;
 
     /**
      * Is allow change votes
      * @var bool
      */
-    public $allow_change_vote = true;
+    public $allowChangeVote = true;
 
     /**
-     * Matching models with ids
+     * Matching models with integer id's
      * @var array
      */
     public $matchingModels;

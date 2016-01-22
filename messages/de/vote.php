@@ -14,5 +14,5 @@ return [
     'Aggregate rating' => 'Aggregate Bewertung',
     'Model name has not been sent' => 'Modelname wurde nicht gesendet',
     'Target id has not been sent' => 'Ziel-ID wurde nicht gesendet',
-    'model_name or target_id not configurated' => 'Der Modelname oder Ziel-ID wurde nicht konfiguriert',
+    'modelName or targetId not configurated' => 'Der Modelname oder Ziel-ID wurde nicht konfiguriert',
 ];
