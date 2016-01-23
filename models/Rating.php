@@ -90,53 +90,74 @@ class Rating extends ActiveRecord
      */
     public static function getModelIdByName($modelName)
     {
-        $matchingModels = Yii::$app->getModule('vote')->matchingModels;
-        if (isset($matchingModels[$modelName]['id'])) {
-            return $matchingModels[$modelName]['id'];
-        }
-        if (isset($matchingModels[$modelName])) {
-            return $matchingModels[$modelName];
+        if (null !== $models = Yii::$app->getModule('vote')->models) {
+            $modelId = array_search($modelName, $models);
+            if (is_int($modelId)) {
+                return $modelId;
+            }
+            foreach ($models as $key => $value) {
+                if (!is_array($value)) {
+                    continue;
+                }
+                if ($value['modelName'] === $modelName) {
+                    return $key;
+                }
+            }
         }
         return false;
     }
 
     /**
-     * @param string $modelName Name of model
+     * @param integer $modelId Id of model
+     * @return string|false Model name or false if matches not found
+     */
+    public static function getModelNameById($modelId)
+    {
+        if (null !== $models = Yii::$app->getModule('vote')->models) {
+            if (isset($models[$modelId])) {
+                if (is_array($models[$modelId])) {
+                    return $models[$modelId]['modelName'];
+                } else {
+                    return $models[$modelId];
+                }
+            }
+        }
+        return false;
+    }
+
+    /**
+     * @param integer $modelId Id of model
      * @return boolean Checks exists permission for guest voting in model params or return global value
      */
-    public static function getIsAllowGuests($modelName)
+    public static function getIsAllowGuests($modelId)
     {
-        $matchingModels = Yii::$app->getModule('vote')->matchingModels;
-        if (isset($matchingModels[$modelName]['allowGuests'])) {
-            return $matchingModels[$modelName]['allowGuests'];
+        $models = Yii::$app->getModule('vote')->models;
+        if (isset($models[$modelId]['allowGuests'])) {
+            return $models[$modelId]['allowGuests'];
         }
         return Yii::$app->getModule('vote')->allowGuests;
     }
 
     /**
-     * @param string $modelName Name of model
+     * @param string $modelId Id of model
      * @return boolean Checks exists permission for change vote in model params or return global value
      */
-    public static function getIsAllowChangeVote($modelName)
+    public static function getIsAllowChangeVote($modelId)
     {
-        $matchingModels = Yii::$app->getModule('vote')->matchingModels;
-        if (isset($matchingModels[$modelName]['allowChangeVote'])) {
-            return $matchingModels[$modelName]['allowChangeVote'];
+        $models = Yii::$app->getModule('vote')->models;
+        if (isset($models[$modelId]['allowChangeVote'])) {
+            return $models[$modelId]['allowChangeVote'];
         }
         return Yii::$app->getModule('vote')->allowChangeVote;
     }
 
     /**
-     * @param string $modelName Name of model
+     * @param string $modelId Id of model
      * @param integer $targetId Current value of primary key
-     * @return array ['likes', 'dislikes', 'aggregateRating']
+     * @return array ['likes', 'dislikes', 'rating']
      */
-    public static function getRating($modelName, $targetId)
+    public static function getRating($modelId, $targetId)
     {
-        $modelId = static::getModelIdByName($modelName);
-        if (!is_int($modelId)) {
-            throw new InvalidParamException(Yii::t('vote', 'The model is not registered'));
-        }
         $cacheKey = 'rating' . $modelId . 'target' . $targetId;
         $result = Yii::$app->cache->get($cacheKey);
         if ($result === false) {
@@ -184,7 +205,8 @@ class Rating extends ActiveRecord
      * @param string $str
      * @return string $ip
      */
-    public static function expandIp($str) {
+    public static function expandIp($str) 
+    {
         if (strlen($str) == 16 OR strlen($str) == 4) {
             return inet_ntop(pack("A".strlen($str), $str));
         }

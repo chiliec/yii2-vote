@@ -30,13 +30,13 @@ class Module extends \yii\base\Module
      * Matching models with integer id's
      * @var array
      */
-    public $matchingModels;
+    public $models;
 
     public function init()
     {
         parent::init();
-        if (!isset($this->matchingModels)) {
-            throw new InvalidConfigException('matchingModels not configurated');
+        if (!isset($this->models)) {
+            throw new InvalidConfigException('models not configurated');
         }
         if (empty(Yii::$app->i18n->translations['vote'])) {
             Yii::$app->i18n->translations['vote'] = [

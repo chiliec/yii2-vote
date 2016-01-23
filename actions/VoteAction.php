@@ -19,36 +19,28 @@ class VoteAction extends Action
     {
         if (Yii::$app->request->getIsAjax()) {
             Yii::$app->response->format = Response::FORMAT_JSON;
-
-            if (null === $modelName = Yii::$app->request->post('modelName')) {
-                return ['content' => Yii::t('vote', 'Model name has not been sent')];
+            if (null === $modelId = (int)Yii::$app->request->post('modelId')) {
+                return ['content' => Yii::t('vote', 'modelId has not been sent')];
             }
-
-            if (null === $targetId = Yii::$app->request->post('targetId')) {
+            if (null === $targetId = (int)Yii::$app->request->post('targetId')) {
                 return ['content' => Yii::t('vote', 'The purpose is not defined')];
             }
-
             $act = Yii::$app->request->post('act');
             if (!in_array($act, ['like', 'dislike'], true)) {
                 return ['content' => Yii::t('vote', 'Wrong action')];
             }
             $value = $act === 'like' ? Rating::VOTE_LIKE : Rating::VOTE_DISLIKE;
-
             $userId = Yii::$app->user->getId();
-            if ($userId === null && !Rating::getIsAllowGuests($modelName)) {
+            if ($userId === null && !Rating::getIsAllowGuests($modelId)) {
                 return ['content' => Yii::t('vote', 'Guests are not allowed to vote')];
             }
-
             if (!$userIp = Rating::compressIp(Yii::$app->request->getUserIP())) {
                 return ['content' => Yii::t('vote', 'The user is not recognized')];
             }
-
-            $modelId = Rating::getModelIdByName($modelName);
             if (!is_int($modelId)) {
                 return ['content' => Yii::t('vote', 'The model is not registered')];
             }
-
-            if (Rating::getIsAllowGuests($modelName)) {
+            if (Rating::getIsAllowGuests($modelId)) {
                 $isVoted = Rating::findOne(['model_id' => $modelId, 'target_id' => $targetId, 'user_ip' => $userIp]);
             } else {
                 $isVoted = Rating::findOne(['model_id' => $modelId, 'target_id' => $targetId, 'user_id' => $userId]);
@@ -70,7 +62,7 @@ class VoteAction extends Action
                     return ['content' => Yii::t('vote', 'Validation error')];
                 }
             } else {
-                if ($isVoted->value !== $value && Rating::getIsAllowChangeVote($modelName)) {
+                if ($isVoted->value !== $value && Rating::getIsAllowChangeVote($modelId)) {
                     $isVoted->value = $value;
                     if ($isVoted->save()) {
                         return ['content' => Yii::t('vote', 'Your vote has been changed. Thanks!'), 'success' => true, 'changed' => true];

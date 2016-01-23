@@ -12,6 +12,8 @@ use yii\base\InvalidParamException;
 use yii\base\Widget;
 use yii\helpers\Html;
 use yii\web\View;
+use yii\web\JsExpression;
+use yii\helpers\Json;
 use Yii;
 
 class Vote extends Widget
@@ -75,14 +77,14 @@ class Vote extends Widget
      * @var string
      */
     public $jsErrorVote = "
-        jQuery('#vote-response-'+model+target).html(errorThrown);
+        jQuery('#vote-response-' + model + '-' + target).html(errorThrown);
     ";
 
     /**
      * @var string
      */
     public $jsShowMessage = "
-        jQuery('#vote-response-'+model+target).html(data.content);
+        jQuery('#vote-response-' + model + '-' + target).html(data.content);
     ";
 
     /**
@@ -90,16 +92,18 @@ class Vote extends Widget
      */
     public $jsChangeCounters = "
         if (typeof(data.success) !== 'undefined') {
+            var idUp = '#vote-up-' + model + '-' + target;
+            var idDown = '#vote-down-' + model + '-' + target;
             if (act === 'like') {
-                jQuery('#vote-up-'+model+target).text(parseInt(jQuery('#vote-up-'+model+target).text()) + 1);
+                jQuery(idUp).text(parseInt(jQuery(idUp).text()) + 1);
             } else {
-                jQuery('#vote-down-'+model+target).text(parseInt(jQuery('#vote-down-'+model+target).text()) + 1);
+                jQuery(idDown).text(parseInt(jQuery(idDown).text()) + 1);
             }
             if (typeof(data.changed) !== 'undefined') {
                 if (act === 'like') {
-                    jQuery('#vote-down-'+model+target).text(parseInt(jQuery('#vote-down-'+model+target).text()) - 1);
+                    jQuery(idDown).text(parseInt(jQuery(idDown).text()) - 1);
                 } else {
-                    jQuery('#vote-up-'+model+target).text(parseInt(jQuery('#vote-up-'+model+target).text()) - 1);
+                    jQuery(idUp).text(parseInt(jQuery(idUp).text()) - 1);
                 }
             }
         }
@@ -116,30 +120,44 @@ class Vote extends Widget
             $this->voteUrl = Yii::$app->getUrlManager()->createUrl(['vote/default/vote']);
         }
 
-        $js = "
+        $js = new JsExpression("
             function vote(model, target, act) {
                 jQuery.ajax({ 
                     url: '$this->voteUrl', type: 'POST', dataType: 'json', cache: false,
-                    data: { modelName: model, targetId: target, act: act },
+                    data: { modelId: model, targetId: target, act: act },
                     beforeSend: function(jqXHR, settings) { $this->jsBeforeVote },
                     success: function(data, textStatus, jqXHR) { $this->jsChangeCounters $this->jsShowMessage },
                     complete: function(jqXHR, textStatus) { $this->jsAfterVote },
                     error: function(jqXHR, textStatus, errorThrown) { $this->jsErrorVote }
                 });
             }
-        ";
+        ");
         $this->view->registerJs($js, View::POS_END, $this->jsCodeKey);
     }
 
     public function run()
     {
-        $rating = Rating::getRating($this->modelName, $this->targetId);
-        $id = $this->modelName . $this->targetId;
+        $modelId = Rating::getModelIdByName($this->modelName);
+        $rating = Rating::getRating($modelId, $this->targetId);
+        $id = $modelId . '-' . $this->targetId;
         $content  = Html::beginTag('div', ['class' => $this->classGeneral]);
-        $content .= Html::tag('span', $rating['likes'], ['id' => "vote-up-$id", 'class' => $this->classLike, 'onclick' => "vote('$this->modelName', $this->targetId, 'like'); return false;", 'style' => 'cursor: pointer;']);
+        $content .= Html::tag('span', $rating['likes'], [
+            'id' => "vote-up-$id", 
+            'class' => $this->classLike, 
+            'onclick' => new JsExpression("vote({$modelId}, {$this->targetId}, 'like'); return false;"), 
+            'style' => 'cursor: pointer;'
+        ]);
         $content .= $this->separator;
-        $content .= Html::tag('span', $rating['dislikes'], ['id' => "vote-down-$id", 'class' => $this->classDislike, 'onclick' => "vote('$this->modelName', $this->targetId, 'dislike'); return false;", 'style' => 'cursor: pointer;']);
-        $content .= Html::tag('div', $this->showAggregateRating ? Yii::t('vote', 'Aggregate rating') . ': ' . $rating['rating'] : '', ['id' => "vote-response-$id"]);
+        $content .= Html::tag('span', $rating['dislikes'], [
+            'id' => "vote-down-$id", 
+            'class' => $this->classDislike, 
+            'onclick' => new JsExpression("vote({$modelId}, {$this->targetId}, 'dislike'); return false;"), 
+            'style' => 'cursor: pointer;'
+        ]);
+        $content .= Html::tag('div', 
+            $this->showAggregateRating ? Yii::t('vote', 'Aggregate rating') . ': ' . $rating['rating'] : '', 
+            ['id' => "vote-response-$id"]
+        );
         $content .= Html::endTag('div');
         return $content;
     }
