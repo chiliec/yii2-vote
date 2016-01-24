@@ -11,7 +11,8 @@ sudo: false
 install:
     - composer self-update && composer --version
     - composer global require "fxp/composer-asset-plugin:1.0.0-beta3"
+    - composer global require "codeception/codeception"
     - composer install
 
 script:
-    - php vendor/bin/codecept run
+    - codecept run
