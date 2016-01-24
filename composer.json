@@ -24,6 +24,9 @@
         }
     },
     "require-dev": {
+        "codeception/codeception": "2.0.*",
+        "codeception/specify": "*",
+        "codeception/verify": "*",
         "yiisoft/yii2-codeception": "^2.0"
     }
 }
