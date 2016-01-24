@@ -12,6 +12,7 @@ install:
     - composer self-update && composer --version
     - composer global require "fxp/composer-asset-plugin:1.0.0-beta3"
     - composer global require "codeception/codeception"
+    - export PATH="$HOME/.composer/vendor/bin:$PATH"
     - composer install
 
 script:
