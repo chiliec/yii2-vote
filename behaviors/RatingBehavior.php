@@ -14,11 +14,6 @@ use yii\base\Behavior;
 class RatingBehavior extends Behavior
 {
     /**
-     * @var string Name of model
-     */
-    public $modelName;
-
-    /**
      * @var string Field for rating in database
      */
     public $ratingField = 'rating';
@@ -28,16 +23,12 @@ class RatingBehavior extends Behavior
      */
     public $aggregateRatingField = 'aggregate_rating';
 
-    public function events()
+    /**
+     * @inheritdoc
+     */
+    public function updateRating()
     {
-        return [
-            ActiveRecord::EVENT_AFTER_FIND => 'afterFind',
-        ];
-    }
-
-    public function afterFind($event)
-    {
-        if ($receivedRating = Rating::getRating($this->modelName, $this->owner->{$this->owner->primaryKey()[0]})) {
+        if ($receivedRating = Rating::getRating($this->owner->className(), $this->owner->{$this->owner->primaryKey()[0]})) {
             $rating = $receivedRating['likes'] - $receivedRating['dislikes'];
             $aggregateRating = $receivedRating['rating'];
             if (($this->owner->{$this->ratingField} !== $rating) || ($this->owner->{$this->aggregateRatingField} !== $aggregateRating)) {

@@ -81,6 +81,13 @@ class Rating extends ActiveRecord
     public function afterSave($insert, $changedAttributes)
     {
         Yii::$app->cache->delete('rating' . $this->attributes['model_id'] . 'target' . $this->attributes['target_id']);
+
+        $modelName = static::getModelNameById($this->attributes['model_id']);
+        $model = new $modelName;
+        if (null !== $behavor = $model->getBehavior('rating')) {
+            $behavor->updateRating();
+        }
+
         parent::afterSave($insert, $changedAttributes);
     }
 

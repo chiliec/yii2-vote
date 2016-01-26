@@ -92,9 +92,8 @@ After that, add new behavior in target model:
 ```php
     public function behaviors() {
         return [
-            [
+            'rating' => [
                 'class' => \chiliec\vote\behaviors\RatingBehavior::className(),
-                'modelName' => self::className(),
             ],
         ];
     }
