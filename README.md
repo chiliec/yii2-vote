@@ -1,6 +1,6 @@
 # Vote for Yii2
 
-[![Latest Stable Version](https://poser.pugx.org/chiliec/yii2-vote/v/stable.svg)](https://packagist.org/packages/chiliec/yii2-vote) [![Total Downloads](https://poser.pugx.org/chiliec/yii2-vote/downloads.svg)](https://packagist.org/packages/chiliec/yii2-vote) [![Build Status](https://travis-ci.org/Chiliec/yii2-vote.svg?branch=master)](https://travis-ci.org/Chiliec/yii2-vote) [![License](https://poser.pugx.org/chiliec/yii2-vote/license.svg)](https://packagist.org/packages/chiliec/yii2-vote)
+[![Latest Stable Version](https://poser.pugx.org/chiliec/yii2-vote/v/stable.svg)](https://packagist.org/packages/chiliec/yii2-vote) [![Total Downloads](https://poser.pugx.org/chiliec/yii2-vote/downloads.svg)](https://packagist.org/packages/chiliec/yii2-vote) [![Build Status](https://travis-ci.org/Chiliec/yii2-vote.svg?branch=master)](https://travis-ci.org/Chiliec/yii2-vote) [![Test Coverage](https://codeclimate.com/github/Chiliec/yii2-vote/badges/coverage.svg)](https://codeclimate.com/github/Chiliec/yii2-vote/coverage) [![Code Climate](https://codeclimate.com/github/Chiliec/yii2-vote/badges/gpa.svg)](https://codeclimate.com/github/Chiliec/yii2-vote) [![License](https://poser.pugx.org/chiliec/yii2-vote/license.svg)](https://packagist.org/packages/chiliec/yii2-vote)
 
 Next steps will guide you through the process of installing yii2-vote using **composer**. Installation is a quick and easy three-step process.
 

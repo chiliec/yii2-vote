@@ -22,9 +22,14 @@ return [
             'allowGuests' => true,
             'allowChangeVote' => true,
             'models' => [
-                255 => 'common\models\Story',
+                255 => \tests\unit\mocks\FakeModel::className(),
                 256 => [
-                    'modelName' => 'common\models\Trololo', 
+                    'modelName' => \tests\unit\mocks\FakeModel2::className(), 
+                    'allowGuests' => true,
+                    'allowChangeVote' => true,
+                ],
+                [
+                    'modelName' => \tests\unit\mocks\FakeModel3::className(),
                     'allowGuests' => false,
                     'allowChangeVote' => false,
                 ]

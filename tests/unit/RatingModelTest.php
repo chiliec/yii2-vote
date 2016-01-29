@@ -7,10 +7,12 @@ class RatingModelTest extends \yii\codeception\TestCase
 
     public $firstModelId = 255;
     public $secondModelId = 256;
+    public $thirdModelId = 257;
 
-    public $firstModelName = 'common\models\Story';
-    public $secondModelName = 'common\models\Trololo';
-
+    public $firstModelName = 'tests\unit\mocks\FakeModel';
+    public $secondModelName = 'tests\unit\mocks\FakeModel2';
+    public $thirdModelName = 'tests\unit\mocks\FakeModel3';
+    
     public function testGetModelIdByName()
     {
     	$firstModelId = Rating::getModelIdByName($this->firstModelName);
@@ -18,6 +20,9 @@ class RatingModelTest extends \yii\codeception\TestCase
 
     	$secondModelId = Rating::getModelIdByName($this->secondModelName);
     	$this->assertEquals($secondModelId, $this->secondModelId);
+
+        $thirdModelId = Rating::getModelIdByName($this->thirdModelName);
+        $this->assertEquals($thirdModelId, $this->thirdModelId);
 
     }
 
@@ -28,6 +33,9 @@ class RatingModelTest extends \yii\codeception\TestCase
 
     	$secondModelName = Rating::getModelNameById($this->secondModelId);
     	$this->assertEquals($secondModelName, $this->secondModelName);
+
+        $thirdModelName = Rating::getModelNameById($this->thirdModelId);
+        $this->assertEquals($thirdModelName, $this->thirdModelName);
     }
 
     public function testGetIsAllowGuests()
@@ -36,7 +44,10 @@ class RatingModelTest extends \yii\codeception\TestCase
     	$this->assertEquals($firstIsAllow, true);
 
     	$secondIsAllow = Rating::getIsAllowGuests($this->secondModelId);
-    	$this->assertEquals($secondIsAllow, false);
+    	$this->assertEquals($secondIsAllow, true);
+
+        $thirdIsAllow = Rating::getIsAllowGuests($this->thirdModelId);
+        $this->assertEquals($thirdIsAllow, false);
     }
 
     public function testGetIsAllowChangeVote()
@@ -45,6 +56,9 @@ class RatingModelTest extends \yii\codeception\TestCase
     	$this->assertEquals($firstIsAllow, true);
 
     	$secondIsAllow = Rating::getIsAllowChangeVote($this->secondModelId);
-    	$this->assertEquals($secondIsAllow, false);
+    	$this->assertEquals($secondIsAllow, true);
+
+        $thirdIsAllow = Rating::getIsAllowChangeVote($this->thirdModelId);
+        $this->assertEquals($thirdIsAllow, false);
     }
 }
