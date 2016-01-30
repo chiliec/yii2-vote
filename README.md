@@ -55,14 +55,9 @@ And add widget in view:
 
 ```php
 <?php echo \chiliec\vote\widgets\Vote::widget([
-    'modelName' => $model->className(),
-    'targetId' => $model->id,
+    'model' => $model,
     // optional fields
-    // 'showAggregateRating' => false,
-    // 'classGeneral' => 'text-center', // class for general widget div
-    // 'classLike' => 'glyphicon glyphicon-thumbs-up', // class for like button
-    // 'classDislike' => 'glyphicon glyphicon-thumbs-down', // class for dislike button
-    // 'separator' => '&nbsp;', // separator between like and dislike button
+    // 'showAggregateRating' => true,
 ]); ?>
 ```
 
@@ -91,8 +86,7 @@ For example, if you want to use [noty jQuery plugin](https://github.com/needim/n
 
 ```php
 <?php echo \chiliec\vote\widgets\Vote::widget([
-    'modelName' => $model->className(),
-    'targetId' => $model->id,
+    'model' => $model,
 	'jsShowMessage' => "
 		message = data.content;
 		type = 'error';

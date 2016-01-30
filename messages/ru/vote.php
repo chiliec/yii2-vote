@@ -20,5 +20,5 @@ return [
     'Aggregate rating' => 'Совокупный рейтинг',
     'modelId has not been sent' => 'Не передано id модели',
     'Target id has not been sent' => 'Не передано id цели',
-    'modelName or targetId not configurated' => 'Имя модели или цели не задано',
+    'Model not configurated' => 'Модель не задана',
 ];

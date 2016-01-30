@@ -19,14 +19,9 @@ use Yii;
 class Vote extends Widget
 {
     /**
-     * @var string
+     * @var ActiveRecord
      */
-    public $modelName;
-
-    /**
-     * @var int
-     */
-    public $targetId;
+    public $model;
 
     /**
      * @var string
@@ -37,26 +32,6 @@ class Vote extends Widget
      * @var bool
      */
     public $showAggregateRating = true;
-
-    /**
-     * @var string
-     */
-    public $classGeneral = 'text-center';
-
-    /**
-     * @var string
-     */
-    public $classLike = 'glyphicon glyphicon-thumbs-up';
-
-    /**
-     * @var string
-     */
-    public $classDislike = 'glyphicon glyphicon-thumbs-down';
-
-    /**
-     * @var string
-     */
-    public $separator = '&nbsp;';
 
     /**
      * @var string
@@ -112,8 +87,8 @@ class Vote extends Widget
     public function init()
     {
         parent::init();
-        if (!isset($this->modelName) || !isset($this->targetId)) {
-            throw new InvalidParamException(Yii::t('vote', 'modelName or targetId not configurated'));
+        if (!isset($this->model)) {
+            throw new InvalidParamException(Yii::t('vote', 'Model not configurated'));
         }
 
         if (!isset($this->voteUrl)) {
@@ -137,28 +112,13 @@ class Vote extends Widget
 
     public function run()
     {
-        $modelId = Rating::getModelIdByName($this->modelName);
-        $rating = Rating::getRating($modelId, $this->targetId);
-        $id = $modelId . '-' . $this->targetId;
-        $content  = Html::beginTag('div', ['class' => $this->classGeneral]);
-        $content .= Html::tag('span', $rating['likes'], [
-            'id' => "vote-up-$id", 
-            'class' => $this->classLike, 
-            'onclick' => new JsExpression("vote({$modelId}, {$this->targetId}, 'like'); return false;"), 
-            'style' => 'cursor: pointer;'
+        return $this->render('vote', [
+            'modelId' => Rating::getModelIdByName($this->model->className()),
+            'targetId' => $this->model->{$this->model->primaryKey()[0]},
+            'likesCount' => $this->model->likesCount,
+            'dislikesCount' => $this->model->dislikesCount,
+            'rating' => $this->model->rating,
+            'showAggregateRating' => $this->showAggregateRating,
         ]);
-        $content .= $this->separator;
-        $content .= Html::tag('span', $rating['dislikes'], [
-            'id' => "vote-down-$id", 
-            'class' => $this->classDislike, 
-            'onclick' => new JsExpression("vote({$modelId}, {$this->targetId}, 'dislike'); return false;"), 
-            'style' => 'cursor: pointer;'
-        ]);
-        $content .= Html::tag('div', 
-            $this->showAggregateRating ? Yii::t('vote', 'Aggregate rating') . ': ' . $rating['rating'] : '', 
-            ['id' => "vote-response-$id"]
-        );
-        $content .= Html::endTag('div');
-        return $content;
     }
 }
