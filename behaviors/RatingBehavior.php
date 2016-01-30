@@ -8,19 +8,23 @@
 namespace chiliec\vote\behaviors;
 
 use chiliec\vote\models\Rating;
+use chiliec\vote\models\AggregateRating;
 use yii\db\ActiveRecord;
 use yii\base\Behavior;
+use yii\base\InvalidConfigException;
+use yii\db\ActiveQuery;
 
 class RatingBehavior extends Behavior
 {
     /**
      * @inheritdoc
      */
-    protected function rating()
+    public function attach($owner)
     {
-        $modelId = Rating::getModelIdByName($this->owner->className());
-        $targetId = $this->owner->{$this->owner->primaryKey()[0]};
-        return Rating::getRating($modelId, $targetId);
+        if (!$owner instanceof ActiveRecord) {
+            throw new InvalidConfigException(Yii::t('vote', 'Please attach this behavior to the instance of the ActiveRecord class'));
+        }
+        parent::attach($owner);
     }
 
     /**
@@ -28,7 +32,15 @@ class RatingBehavior extends Behavior
      */
     public function getLikes()
     {
-        return $this->rating()['likes'];
+        return $this->owner
+            ->hasMany(Rating::className(), [
+                'target_id' => $this->owner->primaryKey()[0]
+            ])
+            ->select(['id', 'target_id', 'user_id', 'user_ip', 'value', 'date'])
+            ->where('model_id = :modelId AND value = :value', [
+                ':modelId' => Rating::getModelIdByName($this->owner->className()),
+                ':value' => Rating::VOTE_LIKE,
+            ]);
     }
 
     /**
@@ -36,7 +48,47 @@ class RatingBehavior extends Behavior
      */
     public function getDislikes()
     {
-        return $this->rating()['dislikes'];
+        return $this->owner
+            ->hasMany(Rating::className(), [
+                'target_id' => $this->owner->primaryKey()[0]
+            ])
+            ->select(['id', 'target_id', 'user_id', 'user_ip', 'value', 'date'])
+            ->where('model_id = :modelId AND value = :value', [
+                ':modelId' => Rating::getModelIdByName($this->owner->className()),
+                ':value' => Rating::VOTE_DISLIKE,
+            ]);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getLikesCount()
+    {
+        return $this->owner
+            ->hasOne(AggregateRating::className(), [
+                'target_id' => $this->owner->primaryKey()[0],
+            ])
+            ->select('likes')
+            ->where('model_id = :modelId', [
+                ':modelId' => Rating::getModelIdByName($this->owner->className())
+            ])
+            ->scalar();
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getDislikesCount()
+    {
+        return $this->owner
+            ->hasOne(AggregateRating::className(), [
+                'target_id' => $this->owner->primaryKey()[0],
+            ])
+            ->select('dislikes')
+            ->where('model_id = :modelId', [
+                ':modelId' => Rating::getModelIdByName($this->owner->className())
+            ])
+            ->scalar();
     }
 
     /**
@@ -44,6 +96,14 @@ class RatingBehavior extends Behavior
      */
     public function getRating()
     {
-        return $this->rating()['rating'];
+        return $this->owner
+            ->hasOne(AggregateRating::className(), [
+                'target_id' => $this->owner->primaryKey()[0],
+            ])
+            ->select('rating')
+            ->where('model_id = :modelId', [
+                ':modelId' => Rating::getModelIdByName($this->owner->className())
+            ])
+            ->scalar();
     }
 }

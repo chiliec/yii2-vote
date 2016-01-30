@@ -11,6 +11,7 @@ use Yii;
 use yii\base\InvalidParamException;
 use yii\behaviors\TimestampBehavior;
 use yii\db\ActiveRecord;
+use chiliec\vote\models\AggregateRating;
 
 /**
  * This is the model class for table "{{%rating}}".
@@ -80,7 +81,20 @@ class Rating extends ActiveRecord
      */
     public function afterSave($insert, $changedAttributes)
     {
-        Yii::$app->cache->delete('rating' . $this->attributes['model_id'] . 'target' . $this->attributes['target_id']);
+        Yii::$app->cache->delete('rating' . $this->attributes['model_id'] .
+            'target' . $this->attributes['target_id']);
+
+        $rating = static::getRating($this->attributes['model_id'], $this->attributes['target_id']);
+        $aggregateModel = new AggregateRating;
+        $aggregateModel->attributes = [
+            'model_id' => $this->attributes['model_id'],
+            'target_id' => $this->attributes['target_id'],
+            'likes' => $rating['likes'],
+            'dislikes' => $rating['dislikes'],
+            'rating' => $rating['rating'],
+        ];
+        $aggregateModel->save();
+
         parent::afterSave($insert, $changedAttributes);
     }
 
