@@ -4,7 +4,9 @@ return [
     'class' => 'yii\console\Application',
     'basePath' => \Yii::getAlias('@tests'),
     'runtimePath' => \Yii::getAlias('@tests/_output'),
-    'bootstrap' => [],
+    'bootstrap' => [
+        'chiliec\vote\components\VoteBootstrap',
+    ],
     'components' => [
         'db' => [
             'class' => '\yii\db\Connection',

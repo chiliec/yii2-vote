@@ -26,6 +26,9 @@ to the require section of your `composer.json` file.
 Add following lines to your main configuration file:
 
 ```php
+'bootstrap' => [
+    'chiliec\vote\components\VoteBootstrap',
+],
 'modules' => [
     'vote' => [
         'class' => 'chiliec\vote\Module',
@@ -73,31 +76,6 @@ $ php yii migrate/up --migrationPath=@vendor/chiliec/yii2-vote/migrations
 
 That's all! 
 
--------------------------------
-
-## How to store rating in database
-
-Sometimes you need to store rating in the same table (for example, for sorting). 
-At first, create new fields `rating` and `aggregate_rating` inside target table: 
-
-```sql
-ALTER TABLE `YOUR_TARGET_TABLE_NAME` ADD (
-    `rating` smallint(6) NOT NULL,
-    `aggregate_rating` float(3,2) unsigned NOT NULL
-)
-```
-
-After that, add new behavior in target model:
-
-```php
-    public function behaviors() {
-        return [
-            'rating' => [
-                'class' => \chiliec\vote\behaviors\RatingBehavior::className(),
-            ],
-        ];
-    }
-```
 
 ## Customizing JS-events
 

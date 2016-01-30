@@ -21,10 +21,6 @@ class BehaviorTest extends \yii\codeception\TestCase
 		$name = $model::className();
 		$this->assertEquals($name, 'tests\unit\mocks\FakeModel');
 		
-		$model->attachBehavior('rating', [
-			'class' => \chiliec\vote\behaviors\RatingBehavior::className(),
-		]);
-
 		$this->assertEquals($model->likes, 0);
 		$this->assertEquals($model->dislikes, 0);
 		$this->assertEquals($model->rating, 0);
