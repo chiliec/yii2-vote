@@ -115,9 +115,9 @@ class Vote extends Widget
         return $this->render('vote', [
             'modelId' => Rating::getModelIdByName($this->model->className()),
             'targetId' => $this->model->{$this->model->primaryKey()[0]},
-            'likesCount' => $this->model->likesCount,
-            'dislikesCount' => $this->model->dislikesCount,
-            'rating' => $this->model->rating,
+            'likesCount' => is_int($this->model->likesCount) ? $this->model->likesCount : count($this->model->likes),
+            'dislikesCount' => is_int($this->model->dislikesCount) ? $this->model->dislikesCount : count($this->model->dislikes),
+            'rating' => is_numeric($this->model->rating) ? $this->model->rating : 0,
             'showAggregateRating' => $this->showAggregateRating,
         ]);
     }

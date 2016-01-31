@@ -85,14 +85,18 @@ class Rating extends ActiveRecord
             'target' . $this->attributes['target_id']);
 
         $rating = static::getRating($this->attributes['model_id'], $this->attributes['target_id']);
-        $aggregateModel = new AggregateRating;
-        $aggregateModel->attributes = [
+        $aggregateModel = AggregateRating::findOne([
             'model_id' => $this->attributes['model_id'],
             'target_id' => $this->attributes['target_id'],
-            'likes' => $rating['likes'],
-            'dislikes' => $rating['dislikes'],
-            'rating' => $rating['rating'],
-        ];
+        ]);
+        if (null === $aggregateModel) {
+            $aggregateModel = new AggregateRating;
+            $aggregateModel->model_id = $this->attributes['model_id'];
+            $aggregateModel->target_id = $this->attributes['target_id'];
+        }
+        $aggregateModel->likes = $rating['likes'];
+        $aggregateModel->dislikes = $rating['dislikes'];
+        $aggregateModel->rating = $rating['rating'];
         $aggregateModel->save();
 
         parent::afterSave($insert, $changedAttributes);
