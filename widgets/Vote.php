@@ -117,7 +117,7 @@ class Vote extends Widget
             'targetId' => $this->model->{$this->model->primaryKey()[0]},
             'likes' => $this->model->likesCount,
             'dislikes' => $this->model->dislikesCount,
-            'rating' => $this->model->ratingScalar,
+            'rating' => $this->model->ratingNumber,
             'showAggregateRating' => $this->showAggregateRating,
         ]);
     }

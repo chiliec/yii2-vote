@@ -81,7 +81,7 @@ class RatingBehavior extends Behavior
      */
     public function getLikesCount()
     {
-        return $this->likes->count();
+        return $this->likes->scalar();
     }
 
     /**
@@ -89,13 +89,13 @@ class RatingBehavior extends Behavior
      */
     public function getDislikesCount()
     {
-        return $this->dislikes->count();
+        return $this->dislikes->scalar();
     }
 
     /**
      * @inheritdoc
      */
-    public function getRatingScalar()
+    public function getRatingNumber()
     {
         return $this->rating->scalar();
     }
