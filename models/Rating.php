@@ -83,22 +83,7 @@ class Rating extends ActiveRecord
     {
         Yii::$app->cache->delete('rating' . $this->attributes['model_id'] .
             'target' . $this->attributes['target_id']);
-
-        $rating = static::getRating($this->attributes['model_id'], $this->attributes['target_id']);
-        $aggregateModel = AggregateRating::findOne([
-            'model_id' => $this->attributes['model_id'],
-            'target_id' => $this->attributes['target_id'],
-        ]);
-        if (null === $aggregateModel) {
-            $aggregateModel = new AggregateRating;
-            $aggregateModel->model_id = $this->attributes['model_id'];
-            $aggregateModel->target_id = $this->attributes['target_id'];
-        }
-        $aggregateModel->likes = $rating['likes'];
-        $aggregateModel->dislikes = $rating['dislikes'];
-        $aggregateModel->rating = $rating['rating'];
-        $aggregateModel->save();
-
+        static::updateRating($this->attributes['model_id'], $this->attributes['target_id']);
         parent::afterSave($insert, $changedAttributes);
     }
 
@@ -172,13 +157,11 @@ class Rating extends ActiveRecord
     /**
      * @param string $modelId Id of model
      * @param integer $targetId Current value of primary key
-     * @return array ['likes', 'dislikes', 'rating']
      */
-    public static function getRating($modelId, $targetId)
+    public static function updateRating($modelId, $targetId)
     {
         $cacheKey = 'rating' . $modelId . 'target' . $targetId;
-        $result = Yii::$app->cache->get($cacheKey);
-        if ($result === false) {
+        if (Yii::$app->cache->get($cacheKey) === false) {
             $likes = static::find()->where(['model_id' => $modelId, 'target_id' => $targetId, 'value' => self::VOTE_LIKE])->count();
             $dislikes = static::find()->where(['model_id' => $modelId, 'target_id' => $targetId, 'value' => self::VOTE_DISLIKE])->count();
             if ($likes + $dislikes !== 0) {
@@ -190,10 +173,21 @@ class Rating extends ActiveRecord
                 $rating = 0;
             }
             $rating = round($rating * 10, 2);
-            $result = ['likes' => $likes, 'dislikes' => $dislikes, 'rating' => $rating];
-            Yii::$app->cache->set($cacheKey, $result);
+            $aggregateModel = AggregateRating::findOne([
+                'model_id' => $modelId,
+                'target_id' => $targetId,
+            ]);
+            if (null === $aggregateModel) {
+                $aggregateModel = new AggregateRating;
+                $aggregateModel->model_id = $modelId;
+                $aggregateModel->target_id = $targetId;
+            }
+            $aggregateModel->likes = $likes;
+            $aggregateModel->dislikes = $dislikes;
+            $aggregateModel->rating = $rating;
+            $aggregateModel->save();
+            Yii::$app->cache->set($cacheKey, true);
         }
-        return $result;
     }
 
     /**

@@ -32,14 +32,14 @@ class RatingBehavior extends Behavior
      */
     public function getLikes()
     {
+        Rating::updateRating(Rating::getModelIdByName($this->owner->className()), $this->owner->{$this->owner->primaryKey()[0]});
         return $this->owner
-            ->hasMany(Rating::className(), [
-                'target_id' => $this->owner->primaryKey()[0]
+            ->hasOne(AggregateRating::className(), [
+                'target_id' => $this->owner->primaryKey()[0],
             ])
-            ->select(['id', 'target_id', 'user_id', 'user_ip', 'value', 'date'])
-            ->where('model_id = :modelId AND value = :value', [
-                ':modelId' => Rating::getModelIdByName($this->owner->className()),
-                ':value' => Rating::VOTE_LIKE,
+            ->select('likes')
+            ->where('model_id = :modelId', [
+                ':modelId' => Rating::getModelIdByName($this->owner->className())
             ]);
     }
 
@@ -48,14 +48,31 @@ class RatingBehavior extends Behavior
      */
     public function getDislikes()
     {
+        Rating::updateRating(Rating::getModelIdByName($this->owner->className()), $this->owner->{$this->owner->primaryKey()[0]});
         return $this->owner
-            ->hasMany(Rating::className(), [
-                'target_id' => $this->owner->primaryKey()[0]
+            ->hasOne(AggregateRating::className(), [
+                'target_id' => $this->owner->primaryKey()[0],
             ])
-            ->select(['id', 'target_id', 'user_id', 'user_ip', 'value', 'date'])
-            ->where('model_id = :modelId AND value = :value', [
-                ':modelId' => Rating::getModelIdByName($this->owner->className()),
-                ':value' => Rating::VOTE_DISLIKE,
+            ->select('dislikes')
+            ->where('model_id = :modelId', [
+                ':modelId' => Rating::getModelIdByName($this->owner->className())
+            ]);
+
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRating()
+    {
+        Rating::updateRating(Rating::getModelIdByName($this->owner->className()), $this->owner->{$this->owner->primaryKey()[0]});
+        return $this->owner
+            ->hasOne(AggregateRating::className(), [
+                'target_id' => $this->owner->primaryKey()[0],
+            ])
+            ->select('rating')
+            ->where('model_id = :modelId', [
+                ':modelId' => Rating::getModelIdByName($this->owner->className())
             ]);
     }
 
@@ -64,15 +81,7 @@ class RatingBehavior extends Behavior
      */
     public function getLikesCount()
     {
-        return $this->owner
-            ->hasOne(AggregateRating::className(), [
-                'target_id' => $this->owner->primaryKey()[0],
-            ])
-            ->select('likes')
-            ->where('model_id = :modelId', [
-                ':modelId' => Rating::getModelIdByName($this->owner->className())
-            ])
-            ->scalar();
+        return $this->likes->count();
     }
 
     /**
@@ -80,30 +89,14 @@ class RatingBehavior extends Behavior
      */
     public function getDislikesCount()
     {
-        return $this->owner
-            ->hasOne(AggregateRating::className(), [
-                'target_id' => $this->owner->primaryKey()[0],
-            ])
-            ->select('dislikes')
-            ->where('model_id = :modelId', [
-                ':modelId' => Rating::getModelIdByName($this->owner->className())
-            ])
-            ->scalar();
+        return $this->dislikes->count();
     }
 
     /**
      * @inheritdoc
      */
-    public function getRating()
+    public function getRatingScalar()
     {
-        return $this->owner
-            ->hasOne(AggregateRating::className(), [
-                'target_id' => $this->owner->primaryKey()[0],
-            ])
-            ->select('rating')
-            ->where('model_id = :modelId', [
-                ':modelId' => Rating::getModelIdByName($this->owner->className())
-            ])
-            ->scalar();
+        return $this->rating->scalar();
     }
 }
