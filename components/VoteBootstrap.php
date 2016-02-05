@@ -32,6 +32,11 @@ class VoteBootstrap implements BootstrapInterface
 					]);
 				}
 			});
+			Event::on($modelName::className(), $modelName::EVENT_AFTER_FIND, function ($event) {
+				$modelId = Rating::getModelIdByName($event->sender->className());
+				$targetId = $event->sender->{$event->sender->primaryKey()[0]};
+	            Rating::updateRating($modelId, $targetId);
+	        });
 		}
     }
 }

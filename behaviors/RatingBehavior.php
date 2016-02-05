@@ -32,7 +32,6 @@ class RatingBehavior extends Behavior
      */
     public function getLikes()
     {
-        Rating::updateRating(Rating::getModelIdByName($this->owner->className()), $this->owner->{$this->owner->primaryKey()[0]});
         return $this->owner
             ->hasOne(AggregateRating::className(), [
                 'target_id' => $this->owner->primaryKey()[0],
@@ -48,7 +47,6 @@ class RatingBehavior extends Behavior
      */
     public function getDislikes()
     {
-        Rating::updateRating(Rating::getModelIdByName($this->owner->className()), $this->owner->{$this->owner->primaryKey()[0]});
         return $this->owner
             ->hasOne(AggregateRating::className(), [
                 'target_id' => $this->owner->primaryKey()[0],
@@ -57,7 +55,6 @@ class RatingBehavior extends Behavior
             ->where('model_id = :modelId', [
                 ':modelId' => Rating::getModelIdByName($this->owner->className())
             ]);
-
     }
 
     /**
@@ -65,7 +62,6 @@ class RatingBehavior extends Behavior
      */
     public function getRating()
     {
-        Rating::updateRating(Rating::getModelIdByName($this->owner->className()), $this->owner->{$this->owner->primaryKey()[0]});
         return $this->owner
             ->hasOne(AggregateRating::className(), [
                 'target_id' => $this->owner->primaryKey()[0],
