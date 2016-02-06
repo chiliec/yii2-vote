@@ -61,6 +61,18 @@ And add widget in view:
 ]); ?>
 ```
 
+Also you can add widget for display top rated models:
+
+```php
+<?php echo TopRated::widget([
+    'modelName' => \common\models\Post::className(),
+    'title' => 'Top rated models',
+    'path' => 'site/view',
+    'limit' => 10,
+    'titleField' => 'title',
+]) ?>
+```
+
 ## Step 3: Updating database schema
 
 After you downloaded and configured Yii2-vote, the last thing you need to do is updating your database schema by applying the migrations:
