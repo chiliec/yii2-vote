@@ -2,9 +2,13 @@
 
 [![Latest Stable Version](https://poser.pugx.org/chiliec/yii2-vote/v/stable.svg)](https://packagist.org/packages/chiliec/yii2-vote) [![Total Downloads](https://poser.pugx.org/chiliec/yii2-vote/downloads.svg)](https://packagist.org/packages/chiliec/yii2-vote) [![Build Status](https://travis-ci.org/Chiliec/yii2-vote.svg?branch=master)](https://travis-ci.org/Chiliec/yii2-vote) [![Test Coverage](https://codeclimate.com/github/Chiliec/yii2-vote/badges/coverage.svg)](https://codeclimate.com/github/Chiliec/yii2-vote/coverage) [![Code Climate](https://codeclimate.com/github/Chiliec/yii2-vote/badges/gpa.svg)](https://codeclimate.com/github/Chiliec/yii2-vote) [![License](https://poser.pugx.org/chiliec/yii2-vote/license.svg)](https://packagist.org/packages/chiliec/yii2-vote)
 
+![How yii2-vote works](https://raw.githubusercontent.com/Chiliec/yii2-vote/develop/docs/showcase.gif)
+
+## Installation
+
 Next steps will guide you through the process of installing yii2-vote using **composer**. Installation is a quick and easy three-step process.
 
-## Step 1: Install component via composer
+### Step 1: Install component via composer
 
 Run command
 
@@ -21,7 +25,7 @@ or add
 to the require section of your `composer.json` file.
 
 
-## Step 2: Configuring your application
+### Step 2: Configuring your application
 
 Add following lines to your main configuration file:
 
@@ -64,7 +68,7 @@ And add widget in view:
 Also you can add widget for display top rated models:
 
 ```php
-<?php echo TopRated::widget([
+<?php echo \chiliec\vote\widgets\TopRated::widget([
     'modelName' => \common\models\Post::className(),
     'title' => 'Top rated models',
     'path' => 'site/view',
@@ -73,7 +77,7 @@ Also you can add widget for display top rated models:
 ]) ?>
 ```
 
-## Step 3: Updating database schema
+### Step 3: Updating database schema
 
 After you downloaded and configured Yii2-vote, the last thing you need to do is updating your database schema by applying the migrations:
 
@@ -81,39 +85,9 @@ After you downloaded and configured Yii2-vote, the last thing you need to do is 
 $ php yii migrate/up --migrationPath=@vendor/chiliec/yii2-vote/migrations
 ```
 
-That's all! 
+## Documentation
 
-
-## Customizing JS-events
-
-If you want to customize JS-events, you can rewrite widget properties:
-
-* `jsBeforeVote` by default is not defined. Called before vote.
-* `jsChangeCounters` responsible for change counters. Available `data` property (may contains `content`, `success` and `changed` properties).
-* `jsShowMessage` responsible for show message. Available `data` property too.
-* `jsAfterVote` by default is not defined. Called after vote.
-* `jsErrorVote` called if the request fails. Available `errorThrown`, contains error message.
-
-For example, if you want to use [noty jQuery plugin](https://github.com/needim/noty) for show notifications, you may rewrite `jsShowMessage`:
-
-```php
-<?php echo \chiliec\vote\widgets\Vote::widget([
-    'model' => $model,
-	'jsShowMessage' => "
-		message = data.content;
-		type = 'error';
-		if (typeof(data.success) !== 'undefined') { type = 'success'; }
-		if (typeof(data.changed) !== 'undefined') { type = 'information'; }
-		noty({
-			text: message,
-			type: type,
-			layout: 'topRight',
-			timeout: 1500,
-			force: true
-		});
-	",
-]);
-```
+Extended information about configuration of this module see in [docs/README.md](https://github.com/Chiliec/yii2-vote/blob/develop/docs/README.md).
 
 ## License
 
