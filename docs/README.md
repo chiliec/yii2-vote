@@ -1,5 +1,17 @@
 # Extended description for yii2-vote
 
+## Migration from 2.* to 3.0
+
+If you using `RatingBehavior` in models, after update you must drop `rating` and `aggregate_rating` columns in table:
+
+```sql
+ALTER TABLE `YOUR_TARGET_TABLE_NAME` 
+	DROP `rating`, 
+	DROP `aggregate_rating`;
+```
+
+and delete corresponding properties from model.
+
 ## Manually add behavior in models
 
 Behavior to models autoincluded by bootstrap in main app configuration:
