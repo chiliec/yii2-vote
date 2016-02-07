@@ -30,69 +30,14 @@ class RatingBehavior extends Behavior
     /**
      * @inheritdoc
      */
-    public function getLikes()
+    public function getAggregate()
     {
         return $this->owner
             ->hasOne(AggregateRating::className(), [
                 'target_id' => $this->owner->primaryKey()[0],
             ])
-            ->select('likes')
-            ->where('model_id = :modelId', [
-                ':modelId' => Rating::getModelIdByName($this->owner->className())
+            ->onCondition([
+                'model_id' => Rating::getModelIdByName($this->owner->className())
             ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getDislikes()
-    {
-        return $this->owner
-            ->hasOne(AggregateRating::className(), [
-                'target_id' => $this->owner->primaryKey()[0],
-            ])
-            ->select('dislikes')
-            ->where('model_id = :modelId', [
-                ':modelId' => Rating::getModelIdByName($this->owner->className())
-            ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getRating()
-    {
-        return $this->owner
-            ->hasOne(AggregateRating::className(), [
-                'target_id' => $this->owner->primaryKey()[0],
-            ])
-            ->select('rating')
-            ->where('model_id = :modelId', [
-                ':modelId' => Rating::getModelIdByName($this->owner->className())
-            ]);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getLikesCount()
-    {
-        return $this->likes->scalar();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getDislikesCount()
-    {
-        return $this->dislikes->scalar();
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function getRatingNumber()
-    {
-        return $this->rating->scalar();
     }
 }

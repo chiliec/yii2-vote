@@ -64,7 +64,7 @@ class TopRated extends Widget
         ->all();
         $ids = ArrayHelper::getColumn($ratingArray, 'target_id');
         $models = $modelName::find()
-            ->joinWith('rating')
+            ->joinWith('aggregate')
             ->where(['in', $modelName::tableName() . '.' . $modelName::primaryKey()[0], $ids])
             ->orderBy('rating DESC')
             ->all();
