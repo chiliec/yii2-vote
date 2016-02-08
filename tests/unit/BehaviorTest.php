@@ -1,6 +1,7 @@
 <?php
 
 use yii\console\controllers;
+use chiliec\vote\models\Rating;
 
 class BehaviorTest extends \yii\codeception\TestCase
 {
@@ -18,14 +19,16 @@ class BehaviorTest extends \yii\codeception\TestCase
 	public function testBehaivorIsWorks()
 	{
 		$model = new \tests\unit\mocks\FakeModel;
-		$name = $model::className();
-		$this->assertEquals($name, 'tests\unit\mocks\FakeModel');
-		
-		$this->assertEquals(count($model->likes), 0);
-		$this->assertEquals(count($model->dislikes), 0);
-		$this->assertEquals($model->likesCount, 0);
-		$this->assertEquals($model->dislikesCount, 0);
-		$this->assertEquals($model->rating, 0);
+		$this->assertEquals($model::className(), 'tests\unit\mocks\FakeModel');
+		$this->assertEquals(Rating::getModelIdByName($model->className()), 255);
+		$this->assertEquals($model->aggregate, null);
+		// aggregate will be linked after finding model
+		$model->id = 1;
+		$model->save();
+		$newModel = $model::findOne(1); 
+		$this->assertEquals($newModel->aggregate->likes, 0);
+		$this->assertEquals($newModel->aggregate->dislikes, 0);
+		$this->assertEquals($newModel->aggregate->rating, 0.0);
 	}
 
 }
