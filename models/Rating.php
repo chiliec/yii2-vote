@@ -81,8 +81,6 @@ class Rating extends ActiveRecord
      */
     public function afterSave($insert, $changedAttributes)
     {
-        Yii::$app->cache->delete('rating' . $this->attributes['model_id'] .
-            'target' . $this->attributes['target_id']);
         static::updateRating($this->attributes['model_id'], $this->attributes['target_id']);
         parent::afterSave($insert, $changedAttributes);
     }
@@ -160,34 +158,30 @@ class Rating extends ActiveRecord
      */
     public static function updateRating($modelId, $targetId)
     {
-        $cacheKey = 'rating' . $modelId . 'target' . $targetId;
-        if (Yii::$app->cache->get($cacheKey) === false) {
-            $likes = static::find()->where(['model_id' => $modelId, 'target_id' => $targetId, 'value' => self::VOTE_LIKE])->count();
-            $dislikes = static::find()->where(['model_id' => $modelId, 'target_id' => $targetId, 'value' => self::VOTE_DISLIKE])->count();
-            if ($likes + $dislikes !== 0) {
-                // Рейтинг = Нижняя граница доверительного интервала Вильсона (Wilson) для параметра Бернулли
-                // http://habrahabr.ru/company/darudar/blog/143188/
-                $rating = (($likes + 1.9208) / ($likes + $dislikes) - 1.96 * SQRT(($likes * $dislikes)
-                            / ($likes + $dislikes) + 0.9604) / ($likes + $dislikes)) / (1 + 3.8416 / ($likes + $dislikes));
-            } else {
-                $rating = 0;
-            }
-            $rating = round($rating * 10, 2);
-            $aggregateModel = AggregateRating::findOne([
-                'model_id' => $modelId,
-                'target_id' => $targetId,
-            ]);
-            if (null === $aggregateModel) {
-                $aggregateModel = new AggregateRating;
-                $aggregateModel->model_id = $modelId;
-                $aggregateModel->target_id = $targetId;
-            }
-            $aggregateModel->likes = $likes;
-            $aggregateModel->dislikes = $dislikes;
-            $aggregateModel->rating = $rating;
-            $aggregateModel->save();
-            Yii::$app->cache->set($cacheKey, true);
+        $likes = static::find()->where(['model_id' => $modelId, 'target_id' => $targetId, 'value' => self::VOTE_LIKE])->count();
+        $dislikes = static::find()->where(['model_id' => $modelId, 'target_id' => $targetId, 'value' => self::VOTE_DISLIKE])->count();
+        if ($likes + $dislikes !== 0) {
+            // Рейтинг = Нижняя граница доверительного интервала Вильсона (Wilson) для параметра Бернулли
+            // http://habrahabr.ru/company/darudar/blog/143188/
+            $rating = (($likes + 1.9208) / ($likes + $dislikes) - 1.96 * SQRT(($likes * $dislikes)
+                        / ($likes + $dislikes) + 0.9604) / ($likes + $dislikes)) / (1 + 3.8416 / ($likes + $dislikes));
+        } else {
+            $rating = 0;
         }
+        $rating = round($rating * 10, 2);
+        $aggregateModel = AggregateRating::findOne([
+            'model_id' => $modelId,
+            'target_id' => $targetId,
+        ]);
+        if (null === $aggregateModel) {
+            $aggregateModel = new AggregateRating;
+            $aggregateModel->model_id = $modelId;
+            $aggregateModel->target_id = $targetId;
+        }
+        $aggregateModel->likes = $likes;
+        $aggregateModel->dislikes = $dislikes;
+        $aggregateModel->rating = $rating;
+        $aggregateModel->save();
     }
 
     /**
