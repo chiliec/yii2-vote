@@ -22,10 +22,10 @@ class BehaviorTest extends \yii\codeception\TestCase
 		$this->assertEquals($model::className(), 'tests\unit\mocks\FakeModel');
 		$this->assertEquals(Rating::getModelIdByName($model->className()), 255);
 		$this->assertEquals($model->aggregate, null);
-		// aggregate will be linked after finding model
 		$model->id = 1;
 		$model->save();
-		$newModel = $model::findOne(1); 
+		Rating::updateRating(Rating::getModelIdByName($model->className()), $model->id);
+		$newModel = $model::findOne($model->id);
 		$this->assertEquals($newModel->aggregate->likes, 0);
 		$this->assertEquals($newModel->aggregate->dislikes, 0);
 		$this->assertEquals($newModel->aggregate->rating, 0.0);
