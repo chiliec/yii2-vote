@@ -15,6 +15,7 @@ and delete corresponding properties from model.
 ## Manually add behavior in models
 
 Behavior to models autoincluded by bootstrap in main app configuration:
+
 ```php
 'bootstrap' => [
     'chiliec\vote\components\VoteBootstrap',
@@ -45,6 +46,24 @@ public function afterFind() {
 	Rating::updateRating($modelId, $targetId);
 }
 ```
+
+## Overriding views
+
+If you want to override views of widgets, you can rewrite path to your own path in view application component. For example:
+
+```php
+'components' => [
+    'view' => [
+        'theme' => [
+            'pathMap' => [
+                '@chiliec/vote/widgets/views' => '@app/views/vote'
+            ],
+        ],
+    ],
+],
+```
+
+After that, copy files from `/vendor/chiliec/yii2-vote/widgets/views/` to `views/vote/` and edit it how you want.
 
 ## Customizing JS-events
 
