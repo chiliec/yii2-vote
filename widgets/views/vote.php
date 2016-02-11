@@ -8,3 +8,11 @@
 		<?php } ?>
 	</div>
 </div>
+<div itemprop="aggregateRating" itemscope itemtype="http://schema.org/AggregateRating">
+	<meta itemprop="interactionCount" content="UserLikes:<?=$likes?>"/>
+	<meta itemprop="interactionCount" content="UserDislikes:<?=$dislikes?>"/>
+	<meta itemprop="ratingValue" content="<?=$rating?>"/>
+	<meta itemprop="ratingCount" content="<?=$likes+$dislikes?>"/>
+	<meta itemprop="bestRating" content="10"/>
+	<meta itemprop="worstRating" content="0"/>
+</div>

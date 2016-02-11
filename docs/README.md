@@ -76,3 +76,25 @@ For example, if you want to use [noty jQuery plugin](https://github.com/needim/n
 	",
 ]);
 ```
+
+## Rich snippet in search engines
+
+![Aggregate rating in google rich snippet](https://raw.githubusercontent.com/Chiliec/yii2-vote/develop/docs/AggregateRatingRS.png)
+
+We already marking up aggregate rating information in `Vote widget` with `Schema.org` format. For use it, you should wrap around widget your item type of content, [compatible with review type](https://schema.org/review). For example:
+
+```php
+<span itemscope itemtype="http://schema.org/CreativeWork">
+    <?= \chiliec\vote\widgets\Vote::widget(['model' => $model]); ?>
+</span>
+```
+or
+```php
+<span itemscope itemtype="http://schema.org/Product">
+	<span itemprop="name"><?= $model->title; ?></span>
+    <?= \chiliec\vote\widgets\Vote::widget(['model' => $model]); ?>
+</span>
+```
+
+For more information about marking up rating, see [Enabling Rich Snippets for Reviews and Ratings](https://developers.google.com/structured-data/rich-snippets/reviews) in Google help. For testing, you can use [Structured Data Testing Tool](https://developers.google.com/structured-data/testing-tool/).
+
