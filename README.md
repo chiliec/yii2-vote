@@ -2,7 +2,11 @@
 
 [![Latest Stable Version](https://poser.pugx.org/chiliec/yii2-vote/v/stable.svg)](https://packagist.org/packages/chiliec/yii2-vote) [![Total Downloads](https://poser.pugx.org/chiliec/yii2-vote/downloads.svg)](https://packagist.org/packages/chiliec/yii2-vote) [![Build Status](https://travis-ci.org/Chiliec/yii2-vote.svg?branch=master)](https://travis-ci.org/Chiliec/yii2-vote) [![Test Coverage](https://codeclimate.com/github/Chiliec/yii2-vote/badges/coverage.svg)](https://codeclimate.com/github/Chiliec/yii2-vote/coverage) [![Code Climate](https://codeclimate.com/github/Chiliec/yii2-vote/badges/gpa.svg)](https://codeclimate.com/github/Chiliec/yii2-vote) [![License](https://poser.pugx.org/chiliec/yii2-vote/license.svg)](https://packagist.org/packages/chiliec/yii2-vote)
 
-![How yii2-vote works](https://raw.githubusercontent.com/Chiliec/yii2-vote/develop/docs/showcase.gif)
+![How yii2-vote works](https://raw.githubusercontent.com/Chiliec/yii2-vote/master/docs/showcase.gif)
+
+## Attention! This version is under development!
+
+If you don't like to use unstable versions, see [https://github.com/Chiliec/yii2-vote/tree/2.0.3](last stable release).
 
 ## Installation
 
@@ -13,13 +17,13 @@ Next steps will guide you through the process of installing yii2-vote using **co
 Run command
 
 ```
-php composer.phar require --prefer-dist chiliec/yii2-vote "~2.0"
+php composer.phar require --prefer-dist chiliec/yii2-vote "dev-master"
 ```
 
 or add
 
 ```
-"chiliec/yii2-vote": "~2.0"
+"chiliec/yii2-vote": "dev-master"
 ```
 
 to the require section of your `composer.json` file.
@@ -87,7 +91,7 @@ $ php yii migrate/up --migrationPath=@vendor/chiliec/yii2-vote/migrations
 
 ## Documentation
 
-Extended information about configuration of this module see in [docs/README.md](https://github.com/Chiliec/yii2-vote/blob/develop/docs/README.md).
+Extended information about configuration of this module see in [docs/README.md](https://github.com/Chiliec/yii2-vote/blob/master/docs/README.md).
 
 ## License
 
