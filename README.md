@@ -6,7 +6,7 @@
 
 ## Attention! This version is under development!
 
-If you don't like to use unstable versions, see [https://github.com/Chiliec/yii2-vote/tree/2.0.3](last stable release).
+If you don't like to use unstable versions, see [last stable release](https://github.com/Chiliec/yii2-vote/tree/2.0.3).
 
 ## Installation
 
