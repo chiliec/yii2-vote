@@ -18,7 +18,7 @@ return [
     'You have already voted!' => 'Вы уже голосовали!',
     'Forbidden method' => 'Запрещенный метод',
     'Aggregate rating' => 'Совокупный рейтинг',
-    'Model name has not been sent' => 'Не передано имя модели',
+    'modelId has not been sent' => 'Не передано id модели',
     'Target id has not been sent' => 'Не передано id цели',
-    'model_name or target_id not configurated' => 'Имя модели или цели не задано',
+    'Model not configurated' => 'Модель не задана',
 ];

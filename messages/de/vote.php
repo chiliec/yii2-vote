@@ -12,7 +12,7 @@ return [
     'You have already voted!' => 'Sie haben bereits abgestimmt!',
     'Forbidden method' => 'Verbotene Methode',
     'Aggregate rating' => 'Aggregate Bewertung',
-    'Model name has not been sent' => 'Modelname wurde nicht gesendet',
+    'modelId has not been sent' => 'modelId wurde nicht gesendet',
     'Target id has not been sent' => 'Ziel-ID wurde nicht gesendet',
-    'model_name or target_id not configurated' => 'Der Modelname oder Ziel-ID wurde nicht konfiguriert',
+    'Model not configurated' => 'Der Model wurde nicht konfiguriert',
 ];

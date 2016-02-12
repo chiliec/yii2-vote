@@ -22,5 +22,8 @@
         "psr-4": {
             "chiliec\\vote\\": ""
         }
+    },
+    "require-dev": {
+        "yiisoft/yii2-codeception": "^2.0"
     }
 }
