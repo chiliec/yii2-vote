@@ -47,6 +47,62 @@ public function afterFind() {
 }
 ```
 
+## Sorting by rating in data provider
+
+Go to your Search Model and add `->joinWith('aggregate')` to Query to prevent large number of database queries. After that, add new sort attribute to dataProvider configuration, like this:
+
+```php
+$dataProvider->sort->attributes[] = [
+    'asc' => [AggregateRating::tableName() . '.rating' => SORT_ASC],
+    'desc' => [AggregateRating::tableName() . '.rating' => SORT_DESC],
+    'label' => 'By rating',
+];
+```
+
+Your search model class may look like this:
+
+```php
+use chiliec\vote\models\AggregateRating;
+
+/**
+ * MySuperModelSearch represents the model behind the search form about `common\models\MySuperModelSearch`.
+ */
+class MySuperModelSearch extends MySuperModel
+{
+	/**
+	 * Creates data provider instance with search query applied
+	 *
+	 * @param array $params
+	 *
+	 * @return ActiveDataProvider
+	 */
+	public function search($params)
+	{
+	    $query = MySuperModel::find()->joinWith('aggregate');
+
+	    $dataProvider = new ActiveDataProvider([
+	        'query' => $query,
+	    ]);
+
+	    $dataProvider->sort->attributes[] = [
+	        'asc' => [AggregateRating::tableName() . '.rating' => SORT_ASC],
+	        'desc' => [AggregateRating::tableName() . '.rating' => SORT_DESC],
+	        'label' => 'By rating',
+	    ];
+
+	    $this->load($params);
+
+	    if (!$this->validate()) {
+	        // uncomment the following line if you do not want to return any records when validation fails
+	        // $query->where('0=1');
+	        return $dataProvider;
+	    }
+
+	    return $dataProvider;
+	}
+}
+```
+
 ## Overriding views
 
 If you want to override views of widgets, you can rewrite path to your own path in view application component. For example:
