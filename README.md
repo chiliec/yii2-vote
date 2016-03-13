@@ -4,10 +4,6 @@
 
 ![How yii2-vote works](https://raw.githubusercontent.com/Chiliec/yii2-vote/master/docs/showcase.gif)
 
-## Attention! This version is under development!
-
-If you don't like to use unstable versions, see [last stable release](https://github.com/Chiliec/yii2-vote/tree/2.0.3).
-
 ## Installation
 
 Next steps will guide you through the process of installing yii2-vote using **composer**. Installation is a quick and easy three-step process.
@@ -17,13 +13,13 @@ Next steps will guide you through the process of installing yii2-vote using **co
 Run command
 
 ```
-php composer.phar require --prefer-dist chiliec/yii2-vote "dev-master"
+php composer.phar require --prefer-dist chiliec/yii2-vote "^3.0"
 ```
 
 or add
 
 ```
-"chiliec/yii2-vote": "dev-master"
+"chiliec/yii2-vote": "^3.0"
 ```
 
 to the require section of your `composer.json` file.
@@ -91,7 +87,13 @@ $ php yii migrate/up --migrationPath=@vendor/chiliec/yii2-vote/migrations
 
 ## Documentation
 
-Extended information about configuration of this module see in [docs/README.md](https://github.com/Chiliec/yii2-vote/blob/master/docs/README.md).
+Extended information about configuration of this module see in [docs/README.md](https://github.com/Chiliec/yii2-vote/blob/master/docs/README.md). There you can find:
+* [Migration from 2.* to 3.0](https://github.com/Chiliec/yii2-vote/blob/master/docs/README.md#migration-from-2-to-30)
+* [Manually add behavior in models](https://github.com/Chiliec/yii2-vote/blob/master/docs/README.md#manually-add-behavior-in-models)
+* [Sorting by rating in data provider](https://github.com/Chiliec/yii2-vote/blob/master/docs/README.md#sorting-by-rating-in-data-provider)
+* [Overriding views](https://github.com/Chiliec/yii2-vote/blob/master/docs/README.md#overriding-views)
+* [Customizing JS-events](https://github.com/Chiliec/yii2-vote/blob/master/docs/README.md#customizing-js-events)
+* [Rich snippet in search engines](https://github.com/Chiliec/yii2-vote/blob/master/docs/README.md#rich-snippet-in-search-engines)
 
 ## License
 

@@ -154,7 +154,7 @@ For example, if you want to use [noty jQuery plugin](https://github.com/needim/n
 
 ## Rich snippet in search engines
 
-![Aggregate rating in google rich snippet](https://raw.githubusercontent.com/Chiliec/yii2-vote/develop/docs/AggregateRatingRS.png)
+![Aggregate rating in google rich snippet](https://raw.githubusercontent.com/Chiliec/yii2-vote/master/docs/AggregateRatingRS.png)
 
 We already marking up aggregate rating information in `Vote widget` with `Schema.org` format. For use it, you should wrap around widget your item type of content, [compatible with review type](https://schema.org/review). For example:
 
