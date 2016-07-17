@@ -51,7 +51,7 @@ class Vote extends Widget
     /**
      * @var string
      */
-    public $jsErrorVote = "
+    public $jsPopOverErrorVote = "
         $('#vote-' + model + '-' + target).popover({
             content: function() {
                return errorThrown;
@@ -62,7 +62,14 @@ class Vote extends Widget
     /**
      * @var string
      */
-    public $jsShowMessage = "
+    public $jsErrorVote = "
+        jQuery('#vote-response-' + model + '-' + target).html(errorThrown);
+    ";
+
+    /**
+     * @var string
+     */
+    public $jsPopOverShowMessage = "
         $('#vote-' + model + '-' + target).popover({
             content: function() {
                return data.content;
@@ -73,7 +80,14 @@ class Vote extends Widget
     /**
      * @var string
      */
-    public $jsChangeCounters = "
+    public $jsShowMessage = "
+        jQuery('#vote-response-' + model + '-' + target).html(data.content);
+    ";
+
+    /**
+     * @var string
+     */
+    public $jsChangeCounters = <<<JS
         if (typeof(data.success) !== 'undefined') {
             var idUp = '#vote-up-' + model + '-' + target;
             var idDown = '#vote-down-' + model + '-' + target;
@@ -90,12 +104,12 @@ class Vote extends Widget
                 }
             }
         }
-    ";
+JS;
 
     /**
      * @var string
      */
-    public $jsPopOver = <<<EOF
+    public $jsPopOver = <<<JS
         $('body').on('click', function (e) {
             $('[data-toggle="popover"]').each(function () {
                 if (!$(this).is(e.target) && $(this).has(e.target).length === 0 && $('.popover').has(e.target).length === 0) {
@@ -109,7 +123,7 @@ class Vote extends Widget
                     $('#'+e.currentTarget.id).popover('hide');
             }, 8000);
         });
-EOF;
+JS;
 
     public function init()
     {
@@ -122,8 +136,14 @@ EOF;
             $this->voteUrl = Yii::$app->getUrlManager()->createUrl(['vote/default/vote']);
         }
 
-        $js2 = new JsExpression($this->jsPopOver);
-        $this->view->registerJs($js2, View::POS_END);
+        $showMessage = $this->jsShowMessage;
+        $errorMessage = $this->jsErrorVote;
+        if (Yii::$app->getModule('vote')->popOverEnabled) {
+            $js2 = new JsExpression($this->jsPopOver);
+            $this->view->registerJs($js2, View::POS_END);
+            $showMessage = $this->jsPopOverShowMessage;
+            $errorMessage = $this->jsPopOverErrorVote;
+        }
 
         $js = new JsExpression("
             function vote(model, target, act) {
@@ -134,13 +154,13 @@ EOF;
                     success: function(result, textStatus, jqXHR) { 
                         data = result;
                         $this->jsChangeCounters
-                        $this->jsShowMessage
+                        $showMessage
                     },
                     complete: function(jqXHR, textStatus) {
                         $this->jsAfterVote
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-                        $this->jsErrorVote
+                        errorMessage
                     }
                 });
             }
