@@ -71,6 +71,8 @@ class Vote extends Widget
      */
     public $jsPopOverShowMessage = "
         $('#vote-' + model + '-' + target).popover({
+            html : true,
+            trigger: 'manual',
             content: function() {
                return data.content;
             }
@@ -118,10 +120,12 @@ JS;
             });
         });
 
+        var timer;
         $('[data-toggle="popover"]').click(function (e) {
-            setTimeout(function () {
+            clearTimeout(timer);
+            timer = setTimeout(function () {
                     $('#'+e.currentTarget.id).popover('hide');
-            }, 8000);
+            }, 3000);
         });
 JS;
 
