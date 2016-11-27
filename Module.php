@@ -21,10 +21,10 @@ class Module extends \yii\base\Module
     public $allowGuests = true;
 
     /**
-     * Is enable pop over
+     * Is enable popover
      * @var bool
      */
-    public $popOverEnabled = false;
+    public $popOverEnabled = true;
 
     /**
      * Is allow change votes

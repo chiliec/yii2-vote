@@ -13,13 +13,13 @@ Next steps will guide you through the process of installing yii2-vote using **co
 Run command
 
 ```
-php composer.phar require --prefer-dist chiliec/yii2-vote "^3.0"
+php composer.phar require --prefer-dist chiliec/yii2-vote "^4.0"
 ```
 
 or add
 
 ```
-"chiliec/yii2-vote": "^3.0"
+"chiliec/yii2-vote": "^4.0"
 ```
 
 to the require section of your `composer.json` file.
@@ -36,6 +36,8 @@ Add following lines to your main configuration file:
 'modules' => [
     'vote' => [
         'class' => 'chiliec\vote\Module',
+        // show messages in popover
+        'popOverEnabled' => true,
         // global values for all models
         // 'allowGuests' => true,
         // 'allowChangeVote' => true,
@@ -106,6 +108,7 @@ yii2-vote is released under the BSD 3-Clause License. See the bundled [LICENSE.m
 * [fourclub](https://github.com/fourclub) - PK name fix in behavior
 * [yurkinx](https://github.com/yurkinx) - Duplication js render fix
 * [n1k88](https://github.com/n1k88) - German translation
+* [teranchristian](https://github.com/teranchristian) - Add popover to display messages
 
 ## How to contribute 
 
