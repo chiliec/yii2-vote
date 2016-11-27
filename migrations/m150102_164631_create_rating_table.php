@@ -25,7 +25,7 @@ class m150102_164631_create_rating_table extends Migration
             'target_id' => Schema::TYPE_INTEGER . ' NOT NULL',
             'user_id' => Schema::TYPE_STRING . ' NOT NULL',
             'value' => Schema::TYPE_BOOLEAN . ' NOT NULL',
-            'date' => Schema::TYPE_TIMESTAMP . ' NOT NULL',
+            'date' => Schema::TYPE_INTEGER. ' NOT NULL',
         ], $tableOptions);
     }
 
