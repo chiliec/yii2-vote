@@ -17,7 +17,7 @@ class m150127_165542_update_rating_table extends Migration
         if ($this->db->driverName !== 'sqlite') {
             if ($this->db->driverName === 'pgsql') {
                 $this->execute('ALTER TABLE ' . $this->tableName . ' ALTER COLUMN "date" DROP DEFAULT');
-                $this->alterColumn($this->tableName, 'date', Schema::TYPE_INTEGER . ' USING (id::integer)');
+                $this->alterColumn($this->tableName, 'date', Schema::TYPE_INTEGER . ' USING (date::integer)');
                 $this->execute('ALTER TABLE ' . $this->tableName . ' ALTER COLUMN "date" SET NOT NULL');
 
                 $this->execute('ALTER TABLE ' . $this->tableName . ' ALTER COLUMN "user_id" DROP NOT NULL');
