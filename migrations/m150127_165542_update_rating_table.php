@@ -15,10 +15,22 @@ class m150127_165542_update_rating_table extends Migration
     public function up()
     {
         if ($this->db->driverName !== 'sqlite') {
-            $this->alterColumn($this->tableName, 'date', Schema::TYPE_INTEGER. ' NOT NULL');
-            $this->alterColumn($this->tableName, 'user_id', Schema::TYPE_INTEGER . ' NULL DEFAULT NULL');
+            if ($this->db->driverName === 'pgsql') {
+                $this->execute('ALTER TABLE ' . $this->tableName . ' ALTER COLUMN "date" DROP DEFAULT');
+                $this->alterColumn($this->tableName, 'date', Schema::TYPE_INTEGER . ' USING (id::integer)');
+                $this->execute('ALTER TABLE ' . $this->tableName . ' ALTER COLUMN "date" SET NOT NULL');
+
+                $this->execute('ALTER TABLE ' . $this->tableName . ' ALTER COLUMN "user_id" DROP NOT NULL');
+                $this->alterColumn($this->tableName, 'user_id', Schema::TYPE_INTEGER . ' USING (user_id::integer)');
+                $this->execute('ALTER TABLE ' . $this->tableName . ' ALTER COLUMN "user_id" SET DEFAULT NULL');
+            } else {
+                $this->alterColumn($this->tableName, 'date', Schema::TYPE_INTEGER. ' NOT NULL');
+                $this->alterColumn($this->tableName, 'user_id', Schema::TYPE_INTEGER . ' NULL DEFAULT NULL');
+            }
         }
-        if ($this->db->driverName === 'mysql') {
+        if ($this->db->driverName === 'pgsql') {
+            $this->addColumn($this->tableName, 'user_ip', Schema::TYPE_STRING . '( 39 ) NOT NULL DEFAULT \'127.0.0.1\'');
+        } else if ($this->db->driverName === 'mysql') {
             $this->addColumn($this->tableName, 'user_ip', ' VARBINARY( 39 ) NOT NULL AFTER `user_id`');
         } else {
             $this->addColumn($this->tableName, 'user_ip', Schema::TYPE_STRING . '( 39 ) NOT NULL DEFAULT `127.0.0.1`');
