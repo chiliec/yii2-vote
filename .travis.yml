@@ -8,6 +8,9 @@ php:
 
 sudo: false
 
+before_install:
+    - composer config -g github-oauth.github.com "$GITHUB_TOKEN"
+
 install:
     - composer global require "fxp/composer-asset-plugin:^1.2.0"
     - composer global require "codeception/codeception:*"
