@@ -11,6 +11,16 @@ settings:
     memory_limit: 1024M
 coverage:
     enabled: true
+    remote: false
+    include:
+        - actions/*
+        - behaviors/*
+        - components/*
+        - controllers/*
+        - migrations/*
+        - models/*
+        - widgets/*
+        - Module.php
 extensions:
     enabled:
         - Codeception\Extension\RunFailed

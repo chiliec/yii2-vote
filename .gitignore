@@ -1,2 +1,4 @@
 /vendor/*
 tests/_output/*
+cc-test-reporter
+clover.xml
