@@ -1,6 +1,11 @@
 # Vote for Yii2
 
-[![Latest Stable Version](https://poser.pugx.org/chiliec/yii2-vote/v/stable.svg)](https://packagist.org/packages/chiliec/yii2-vote) [![Total Downloads](https://poser.pugx.org/chiliec/yii2-vote/downloads.svg)](https://packagist.org/packages/chiliec/yii2-vote) [![Build Status](https://travis-ci.org/Chiliec/yii2-vote.svg?branch=master)](https://travis-ci.org/Chiliec/yii2-vote) [![Test Coverage](https://codeclimate.com/github/Chiliec/yii2-vote/badges/coverage.svg)](https://codeclimate.com/github/Chiliec/yii2-vote/coverage) [![Code Climate](https://codeclimate.com/github/Chiliec/yii2-vote/badges/gpa.svg)](https://codeclimate.com/github/Chiliec/yii2-vote) [![License](https://poser.pugx.org/chiliec/yii2-vote/license.svg)](https://packagist.org/packages/chiliec/yii2-vote)
+[![Latest Stable Version](https://poser.pugx.org/chiliec/yii2-vote/v/stable.svg)](https://packagist.org/packages/chiliec/yii2-vote) 
+[![Total Downloads](https://poser.pugx.org/chiliec/yii2-vote/downloads.svg)](https://packagist.org/packages/chiliec/yii2-vote) 
+[![Build Status](https://travis-ci.org/Chiliec/yii2-vote.svg?branch=master)](https://travis-ci.org/Chiliec/yii2-vote) 
+[![Code Climate](https://codeclimate.com/github/Chiliec/yii2-vote/badges/gpa.svg)](https://codeclimate.com/github/Chiliec/yii2-vote) 
+[![Test Coverage](https://codeclimate.com/github/Chiliec/yii2-vote/badges/coverage.svg)](https://codeclimate.com/github/Chiliec/yii2-vote/coverage) 
+[![License](https://poser.pugx.org/chiliec/yii2-vote/license.svg)](https://packagist.org/packages/chiliec/yii2-vote)
 
 ![How yii2-vote works](https://raw.githubusercontent.com/Chiliec/yii2-vote/master/docs/showcase.gif)
 
@@ -13,13 +18,13 @@ Next steps will guide you through the process of installing yii2-vote using **co
 Run command
 
 ```
-php composer.phar require --prefer-dist chiliec/yii2-vote "^4.0"
+php composer.phar require --prefer-dist chiliec/yii2-vote "^4.1"
 ```
 
 or add
 
 ```
-"chiliec/yii2-vote": "^4.0"
+"chiliec/yii2-vote": "^4.1"
 ```
 
 to the require section of your `composer.json` file.
@@ -97,10 +102,6 @@ Extended information about configuration of this module see in [docs/README.md](
 * [Customizing JS-events](https://github.com/Chiliec/yii2-vote/blob/master/docs/README.md#customizing-js-events)
 * [Rich snippet in search engines](https://github.com/Chiliec/yii2-vote/blob/master/docs/README.md#rich-snippet-in-search-engines)
 
-## License
-
-yii2-vote is released under the BSD 3-Clause License. See the bundled [LICENSE.md](https://github.com/Chiliec/yii2-vote/blob/master/LICENSE.md) for details.
-
 ## List of contributors
 
 * [Chiliec](https://github.com/Chiliec) - Maintainer
@@ -123,6 +124,10 @@ yii2-vote is released under the BSD 3-Clause License. See the bundled [LICENSE.m
 ## Usage examples
 
 * Your site could be the first in this list
+
+## License
+
+yii2-vote is released under the BSD 3-Clause License. See the bundled [LICENSE.md](https://github.com/Chiliec/yii2-vote/blob/master/LICENSE.md) for details.
 
 ## How to contribute 
 
