@@ -109,6 +109,20 @@ yii2-vote is released under the BSD 3-Clause License. See the bundled [LICENSE.m
 * [yurkinx](https://github.com/yurkinx) - Duplication js render fix
 * [n1k88](https://github.com/n1k88) - German translation
 * [teranchristian](https://github.com/teranchristian) - Add popover to display messages
+* [Skatox](https://github.com/Skatox) - Add support for PostgreSQL
+
+## Other vote solutions for Yii2
+
+* [yii2-vote by hauntd](https://github.com/hauntd/yii2-vote) - it allows you to attach vote widgets, like and favorite buttons to your models
+* [yii2-vote by bigdropinc](https://github.com/bigdropinc/yii2-vote) - another solution with same name
+
+## Articles and tutorials
+
+* [Programming With Yii2: Building Community With Voting, Comments, and Sharing](https://code.tutsplus.com/tutorials/programming-with-yii-building-community-with-voting-comments-and-sharing--cms-27798) by Jeff Reifman
+
+## Usage examples
+
+* Your site could be the first in this list
 
 ## How to contribute 
 
