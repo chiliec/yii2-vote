@@ -18,13 +18,13 @@ Next steps will guide you through the process of installing yii2-vote using **co
 Run command
 
 ```
-php composer.phar require --prefer-dist chiliec/yii2-vote "^4.1"
+php composer.phar require --prefer-dist chiliec/yii2-vote "^4.2"
 ```
 
 or add
 
 ```
-"chiliec/yii2-vote": "^4.1"
+"chiliec/yii2-vote": "^4.2"
 ```
 
 to the require section of your `composer.json` file.

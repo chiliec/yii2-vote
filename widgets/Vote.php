@@ -164,7 +164,7 @@ JS;
                         $this->jsAfterVote
                     },
                     error: function(jqXHR, textStatus, errorThrown) {
-                        errorMessage
+                        $errorMessage
                     }
                 });
             }
