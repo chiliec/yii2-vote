@@ -1,0 +1,30 @@
+{
+  "require": {
+    "yiisoft/yii2": "^2.0",
+    "chiliec/yii2-vote": "dev-master"
+  },
+  "require-dev": {
+    "codeception/codeception": "^5.0",
+    "codeception/module-yii2": "^1.1",
+    "codeception/module-phpbrowser": "^3.0",
+    "codeception/module-asserts": "^3.0",
+    "codeception/module-db": "^3.0"
+  },
+  "repositories": [
+    {
+      "type": "path",
+      "url": ".."
+    },
+    {
+      "type": "composer",
+      "url": "https://asset-packagist.org"
+    }
+  ],
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "config": {
+    "allow-plugins": {
+      "yiisoft/yii2-composer": true
+    }
+  }
+}

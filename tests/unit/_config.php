@@ -1,7 +1,6 @@
 <?php
 return [
     'id' => 'vote-test-app',
-    'class' => 'yii\console\Application',
     'basePath' => \Yii::getAlias('@tests'),
     'runtimePath' => \Yii::getAlias('@tests/_output'),
     'bootstrap' => [
@@ -26,7 +25,7 @@ return [
             'models' => [
                 255 => \tests\unit\mocks\FakeModel::className(),
                 256 => [
-                    'modelName' => \tests\unit\mocks\FakeModel2::className(), 
+                    'modelName' => \tests\unit\mocks\FakeModel2::className(),
                     'allowGuests' => true,
                     'allowChangeVote' => true,
                 ],
@@ -35,7 +34,7 @@ return [
                     'allowGuests' => false,
                     'allowChangeVote' => false,
                 ]
-            ],      
+            ],
         ],
     ],
 ];
