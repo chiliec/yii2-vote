@@ -1,7 +1,7 @@
 {
   "require": {
     "yiisoft/yii2": "^2.0",
-    "chiliec/yii2-vote": "dev-master"
+    "chiliec/yii2-vote": "*"
   },
   "require-dev": {
     "codeception/codeception": "^5.0",
@@ -13,7 +13,10 @@
   "repositories": [
     {
       "type": "path",
-      "url": ".."
+      "url": "..",
+      "options": {
+        "symlink": false
+      }
     },
     {
       "type": "composer",
